@@ -30,7 +30,7 @@ public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserRespo
                 DomainErrors.User.NotFound(request.UserId));
         }
 
-        var response = new UserResponse(maybeUser.Id, maybeUser.Name);
+        var response = new UserResponse(maybeUser.Id, maybeUser.FirstName);
 
         return response;
     }

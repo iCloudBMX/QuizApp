@@ -10,5 +10,5 @@ public class Exam
     public string Link { get; set; }
     public int QuestionCount { get; set; }
     public User Tester { get; set; }
-    public ICollection<ExamAttendants> Attendants { get; set; }
+    public ICollection<ExamAttendant> Attendants { get; set; }
 }
