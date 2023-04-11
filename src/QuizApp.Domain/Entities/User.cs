@@ -6,6 +6,9 @@ public class User
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Phone { get; set; }
+
+    public enum UserRole { TESTER, ADMIN };
+    public UserRole Roles { get; set; }
     public string PasswordHash { get; set; }
     public DateTime RegisteredAt { get; set; }
     public DateTime LastLogin { get; set; }
@@ -14,3 +17,5 @@ public class User
     public ICollection<Tag> Tags { get; set; }
     public ICollection<Exam> Exams { get; set; }
 }
+
+
