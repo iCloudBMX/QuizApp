@@ -14,6 +14,6 @@ public class Question
     public User Tester { get; set; }
     public ICollection<QuestionOption> QuestionOptions { get; set; }
     public ICollection<Tag> Tags { get; set; }
-    //public ICollection<Exam> Exams { get; set; }
-    //public ICollection<AttendsAnswer> MyProperty { get; set; }
+    public ICollection<Exam> Exams { get; set; }
+    public ICollection<AttendsAnswer> MyProperty { get; set; }
 }
