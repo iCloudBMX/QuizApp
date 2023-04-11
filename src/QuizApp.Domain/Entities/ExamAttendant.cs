@@ -1,6 +1,6 @@
 ﻿namespace QuizApp.Domain.Entities;
 
-public class ExamAttendants
+public class ExamAttendant
 {
     public Guid Id { get; set; }
     public Guid ExamId { get; set; }
@@ -8,4 +8,5 @@ public class ExamAttendants
     public string Token { get; set; }
     public float Score { get; set; }
     public Exam Exam { get; set; }
+    public ICollection<AttendantAnswer> AttendantAnswers { get; set; }
 }
