@@ -7,6 +7,6 @@ public class QuestionOption
     public bool IsCorrect { get; set; }
     public string Content { get; set; }
 
-    //public ICollection<AttendantsAnswer> AttendantsAnswers { get; set; }
+    public ICollection<AttendantsAnswer> AttendantsAnswers { get; set; }
     public Question Question { get; set; }
 }
