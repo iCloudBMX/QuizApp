@@ -8,7 +8,7 @@ public class QuestionOptionsConfiguration : IEntityTypeConfiguration<QuestionOpt
     public void Configure(EntityTypeBuilder<QuestionOption> builder)
     {
         builder
-            .ToTable(nameof(QuestionOption));
+            .ToTable("QuestionOptions");
 
         builder
             .HasKey(qo => qo.Id);
