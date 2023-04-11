@@ -8,8 +8,8 @@ public class AttendantsAnswer
     public Guid OptionId { get; set; }
     public Guid ExamId { get; set; }
     public ExamAttendants ExamAttendants { get; set; }
-    //public Question Question { get; set; }
-    //public QuestionOption Option { get;set; }
+    public Question Question { get; set; }
+    public QuestionOption Option { get;set; }
     public Exam Exam { get; set; }
 
 }
