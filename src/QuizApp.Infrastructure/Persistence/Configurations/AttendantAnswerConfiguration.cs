@@ -16,23 +16,27 @@ public class AttendantAnswerConfiguration : IEntityTypeConfiguration<AttendantAn
 
         builder
             .HasOne(atans => atans.Exam)
-            .WithMany(ex => ex.Attendants)
-            .HasForeignKey(attendant => attendant.ExamId);
+            .WithMany()
+            .HasForeignKey(attendant => attendant.ExamId)
+            .OnDelete(DeleteBehavior.NoAction);
         
         builder
             .HasOne(attendant => attendant.Question)
             .WithMany(question => question.AttendantAnswers)
-            .HasForeignKey(answer => answer.QuestionId);
+            .HasForeignKey(answer => answer.QuestionId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .HasOne(attendant => attendant.Option)
             .WithMany(option => option.AttendantsAnswers)
-            .HasForeignKey(attendant => attendant.OptionId);
+            .HasForeignKey(attendant => attendant.OptionId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder
             .HasOne(attendant => attendant.ExamAttendant)
             .WithMany(option => option.AttendantAnswers)
-            .HasForeignKey(attendant => attendant.ExamAttendantsId);
+            .HasForeignKey(attendant => attendant.ExamAttendantId)
+            .OnDelete(DeleteBehavior.NoAction);
 
     }
 }

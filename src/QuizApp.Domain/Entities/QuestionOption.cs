@@ -9,5 +9,5 @@ public class QuestionOption
     public Guid QuestionId { get; set; }
     public Question Question { get; set; }
 
-    public ICollection<AttendantsAnswer> AttendantsAnswers { get; set; }
+    public ICollection<AttendantAnswer> AttendantsAnswers { get; set; }
 }

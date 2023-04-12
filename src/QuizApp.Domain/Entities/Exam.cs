@@ -6,7 +6,7 @@ public class Exam
     public Guid TesterId { get; set; }
     public DateTime StartsAt { get; set; }
     public DateTime EndsAt { get; set; }
-    public TimeOnly Duration { get; set; }
+    public DateTime Duration { get; set; }
     public string Link { get; set; }
     public int QuestionCount { get; set; }
     public User Tester { get; set; }
