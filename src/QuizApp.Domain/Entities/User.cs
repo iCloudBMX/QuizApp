@@ -1,4 +1,6 @@
-﻿namespace QuizApp.Domain.Entities;
+﻿using QuizApp.Domain.Enums;
+
+namespace QuizApp.Domain.Entities;
 
 public class User
 {
@@ -6,8 +8,6 @@ public class User
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Phone { get; set; }
-
-    public enum UserRole { TESTER, ADMIN };
     public UserRole Roles { get; set; }
     public string PasswordHash { get; set; }
     public DateTime RegisteredAt { get; set; }
