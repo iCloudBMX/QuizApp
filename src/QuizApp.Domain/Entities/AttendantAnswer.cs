@@ -3,7 +3,7 @@
 public class AttendantAnswer
 {
     public Guid Id { get; set; }
-    public Guid ExamAttendantsId { get; set; }
+    public Guid ExamAttendantId { get; set; }
     public Guid QuestionId { get; set; }
     public Guid OptionId { get; set; }
     public Guid ExamId { get; set; }
