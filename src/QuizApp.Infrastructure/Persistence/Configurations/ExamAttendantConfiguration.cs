@@ -30,7 +30,7 @@ public class ExamAttendantConfiguration : IEntityTypeConfiguration<ExamAttendant
 
         builder
             .HasOne(x => x.Exam)
-            .WithMany(y => y.Attendants)
+            .WithMany(y => y.ExamAttendants)
             .HasForeignKey(x => x.ExamId);
 
     }

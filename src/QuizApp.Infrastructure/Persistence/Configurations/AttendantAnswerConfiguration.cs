@@ -16,7 +16,7 @@ public class AttendantAnswerConfiguration : IEntityTypeConfiguration<AttendantAn
 
         builder
             .HasOne(atans => atans.Exam)
-            .WithMany(ex => ex.Attendants)
+            .WithMany(ex => ex.AttendantAnswers)
             .HasForeignKey(attendant => attendant.ExamId);
         
         builder

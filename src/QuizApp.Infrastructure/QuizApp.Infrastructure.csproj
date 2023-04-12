@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QuizApp.Application\QuizApp.Application.csproj" />
+    <ProjectReference Include="..\QuizApp.Domain\QuizApp.Domain.csproj" />
   </ItemGroup>
 
 </Project>
