@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /src/QuizApp.Api/appsettings.Development.json
+/src/QuizApp.Api/appsettings.Development.json
