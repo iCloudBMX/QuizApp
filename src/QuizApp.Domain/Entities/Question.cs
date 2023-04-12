@@ -16,5 +16,5 @@ public class Question
     public ICollection<QuestionOption> QuestionOptions { get; set; }
     public ICollection<Tag> Tags { get; set; }
     public ICollection<Exam> Exams { get; set; }
-    public ICollection<AttendantsAnswer> AttendantsAnswers { get; set; }
+    public ICollection<AttendantAnswer> AttendantAnswers { get; set; }
 }

@@ -14,23 +14,35 @@ namespace QuizApp.Infrastructure.Persistence.Configurations
 
             builder.Property(e => e.StartsAt)
                 .IsRequired();
-                
+
             builder.Property(e => e.EndsAt)
                 .IsRequired();
 
-            builder.Property(e=>e.Duration)
+            builder.Property(e => e.Duration)
                 .IsRequired();
 
             builder.Property(e => e.Link)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(e=>e.QuestionCount) 
+            builder.Property(e => e.QuestionCount)
                 .IsRequired();
 
             builder.HasOne(e => e.Tester)
                 .WithMany(u => u.Exams)
                 .HasForeignKey(e => e.TesterId);
+
+            builder.HasMany(e => e.Questions)
+                .WithMany(q => q.Exams)
+                .UsingEntity(
+                    l => l.HasOne(typeof(Exam))
+                    .WithMany()
+                    .HasForeignKey("ExamsId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                    r => r.HasOne(typeof(Question))
+                    .WithMany()
+                    .HasForeignKey("QuestionsId")
+                    .OnDelete(DeleteBehavior.NoAction));
         }
     }
 }

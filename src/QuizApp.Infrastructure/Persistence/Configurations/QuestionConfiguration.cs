@@ -33,5 +33,17 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
             .WithMany(user => user.Questions)
             .HasForeignKey(question => question.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(q => q.Tags)
+            .WithMany(t => t.Questions)
+            .UsingEntity(
+            q => q.HasOne(typeof(Question))
+            .WithMany()
+            .HasForeignKey("QuestionsId")
+            .OnDelete(DeleteBehavior.Cascade),
+            t => t.HasOne(typeof(Tag))
+            .WithMany()
+            .HasForeignKey("TagsId")
+            .OnDelete(DeleteBehavior.NoAction));
     }
 }
