@@ -11,4 +11,5 @@ public class Exam
     public int QuestionCount { get; set; }
     public User Tester { get; set; }
     public ICollection<ExamAttendant> Attendants { get; set; }
+    public ICollection<Question> Questions { get; set; }
 }
