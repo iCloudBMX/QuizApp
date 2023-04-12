@@ -70,9 +70,6 @@ namespace QuizApp.Infrastructure.Migrations
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("QuestionOptionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ExamAttendantId");
@@ -82,8 +79,6 @@ namespace QuizApp.Infrastructure.Migrations
                     b.HasIndex("OptionId");
 
                     b.HasIndex("QuestionId");
-
-                    b.HasIndex("QuestionOptionId");
 
                     b.ToTable("AttendantAnswers", (string)null);
                 });
@@ -269,7 +264,7 @@ namespace QuizApp.Infrastructure.Migrations
                     b.HasOne("QuizApp.Domain.Entities.Exam", null)
                         .WithMany()
                         .HasForeignKey("ExamsId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("QuizApp.Domain.Entities.Question", null)
@@ -284,7 +279,7 @@ namespace QuizApp.Infrastructure.Migrations
                     b.HasOne("QuizApp.Domain.Entities.Question", null)
                         .WithMany()
                         .HasForeignKey("QuestionsId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("QuizApp.Domain.Entities.Tag", null)
@@ -305,11 +300,11 @@ namespace QuizApp.Infrastructure.Migrations
                     b.HasOne("QuizApp.Domain.Entities.Exam", "Exam")
                         .WithMany()
                         .HasForeignKey("ExamId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("QuizApp.Domain.Entities.QuestionOption", "Option")
-                        .WithMany("AttendantsAnswers")
+                        .WithMany("AttendantAnswers")
                         .HasForeignKey("OptionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -319,10 +314,6 @@ namespace QuizApp.Infrastructure.Migrations
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.HasOne("QuizApp.Domain.Entities.QuestionOption", null)
-                        .WithMany("AttendantAnswers")
-                        .HasForeignKey("QuestionOptionId");
 
                     b.Navigation("Exam");
 
@@ -408,8 +399,6 @@ namespace QuizApp.Infrastructure.Migrations
             modelBuilder.Entity("QuizApp.Domain.Entities.QuestionOption", b =>
                 {
                     b.Navigation("AttendantAnswers");
-
-                    b.Navigation("AttendantsAnswers");
                 });
 
             modelBuilder.Entity("QuizApp.Domain.Entities.User", b =>

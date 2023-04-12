@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QuizApp.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -128,7 +128,8 @@ namespace QuizApp.Infrastructure.Migrations
                         name: "FK_ExamQuestion_Exams_ExamsId",
                         column: x => x.ExamsId,
                         principalTable: "Exams",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExamQuestion_Questions_QuestionsId",
                         column: x => x.QuestionsId,
@@ -170,7 +171,8 @@ namespace QuizApp.Infrastructure.Migrations
                         name: "FK_QuestionTag_Questions_QuestionsId",
                         column: x => x.QuestionsId,
                         principalTable: "Questions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_QuestionTag_Tags_TagsId",
                         column: x => x.TagsId,
@@ -186,8 +188,7 @@ namespace QuizApp.Infrastructure.Migrations
                     ExamAttendantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    QuestionOptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ExamId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -201,15 +202,11 @@ namespace QuizApp.Infrastructure.Migrations
                         name: "FK_AttendantAnswers_Exams_ExamId",
                         column: x => x.ExamId,
                         principalTable: "Exams",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AttendantAnswers_QuestionOptions_OptionId",
                         column: x => x.OptionId,
-                        principalTable: "QuestionOptions",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_AttendantAnswers_QuestionOptions_QuestionOptionId",
-                        column: x => x.QuestionOptionId,
                         principalTable: "QuestionOptions",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -238,11 +235,6 @@ namespace QuizApp.Infrastructure.Migrations
                 name: "IX_AttendantAnswers_QuestionId",
                 table: "AttendantAnswers",
                 column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AttendantAnswers_QuestionOptionId",
-                table: "AttendantAnswers",
-                column: "QuestionOptionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExamAttendants_ExamId",

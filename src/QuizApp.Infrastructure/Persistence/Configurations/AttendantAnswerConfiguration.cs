@@ -18,7 +18,7 @@ public class AttendantAnswerConfiguration : IEntityTypeConfiguration<AttendantAn
             .HasOne(atans => atans.Exam)
             .WithMany()
             .HasForeignKey(attendant => attendant.ExamId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
         
         builder
             .HasOne(attendant => attendant.Question)

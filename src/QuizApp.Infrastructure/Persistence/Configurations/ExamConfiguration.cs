@@ -38,7 +38,7 @@ namespace QuizApp.Infrastructure.Persistence.Configurations
                     l => l.HasOne(typeof(Exam))
                     .WithMany()
                     .HasForeignKey("ExamsId")
-                    .OnDelete(DeleteBehavior.NoAction),
+                    .OnDelete(DeleteBehavior.Cascade),
                     r => r.HasOne(typeof(Question))
                     .WithMany()
                     .HasForeignKey("QuestionsId")
