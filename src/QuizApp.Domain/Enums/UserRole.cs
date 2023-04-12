@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace QuizApp.Domain.Enums
+﻿namespace QuizApp.Domain.Enums
 {
-    internal class UserRole
+    public enum UserRole
     {
+        Tester,
+        Admin
     }
 }
