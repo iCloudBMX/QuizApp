@@ -1,6 +1,6 @@
-﻿namespace QuizApp.Api.Extensions;
+﻿namespace QuizApp.Api;
 
-public static class ServiceCollectionExtensions
+public static class Dependencies
 {
     public static IServiceCollection AddApis(
         this IServiceCollection services)
