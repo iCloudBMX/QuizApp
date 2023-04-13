@@ -35,5 +35,6 @@ public static class Dependencies
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IExamRepository,ExamRepository>();
     }
 }
