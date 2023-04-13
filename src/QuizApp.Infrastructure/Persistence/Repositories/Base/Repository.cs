@@ -3,7 +3,7 @@ using QuizApp.Domain.Repositories;
 
 namespace QuizApp.Infrastructure.Persistence.Repositories;
 
-internal class Repository<T> : IRepository<T> where T : class
+public class Repository<T> : IRepository<T> where T : class
 {
     private readonly ApplicationDbContext applicationDbContext;
 
