@@ -10,4 +10,10 @@ public static class DomainErrors
             code: "User.NotFound",
             message: $"The user with the identifier {id} was not found.");
     }
+    public static class Question
+    {
+        public static readonly Func<Guid, Error> NotFound = id => new Error(
+            code: "Question.NotFound",
+            message: $"The question with the identifier {id} was not found.");
+    }
 }
