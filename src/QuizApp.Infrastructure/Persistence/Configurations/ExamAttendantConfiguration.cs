@@ -26,7 +26,7 @@ public class ExamAttendantConfiguration : IEntityTypeConfiguration<ExamAttendant
 
         builder
             .Property(examAttendant => examAttendant.Score)
-            .IsRequired(false);
+            .IsRequired();
 
         builder
             .HasOne(x => x.Exam)
