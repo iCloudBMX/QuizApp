@@ -1,4 +1,4 @@
-﻿namespace QuizApp.Application.Tag.GetTagById;
+﻿namespace QuizApp.Application.Tags.GetTagById;
 
 public record TagResponse(
     Guid Id,
