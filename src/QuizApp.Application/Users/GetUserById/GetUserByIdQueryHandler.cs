@@ -24,10 +24,10 @@ public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserRespo
             entityIds: request.UserId,
             cancellationToken: cancellationToken);
 
-        if(maybeUser is null)
+        if (maybeUser is null)
         {
-            Result.Failure<UserResponse>(
-                DomainErrors.User.NotFound(request.UserId));
+            return Result.Failure<UserResponse>(
+                     DomainErrors.User.NotFound(request.UserId));
         }
 
         var response = new UserResponse(maybeUser.Id, maybeUser.FirstName);

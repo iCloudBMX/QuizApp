@@ -25,10 +25,9 @@ public class GetTagByIdQueryHandler : IQueryHandler<GetTagByIdQuery, TagResponse
             cancellationToken: cancellationToken);
 
         if (maybeTag is null)
-        {
-            Result.Failure<TagResponse>(
-                DomainErrors.Tag.NotFound(request.TagId));
-        }
+            return Result.Failure<TagResponse>(
+                    DomainErrors.Tag.NotFound(request.TagId));
+        
 
         var response = new TagResponse(maybeTag.Id, maybeTag.Title,maybeTag.TesterId);
 
