@@ -1,5 +1,5 @@
 ﻿using QuizApp.Application.Abstractions;
 
-namespace QuizApp.Application.Tag.GetTagById;
+namespace QuizApp.Application.Tags.GetTagById;
 
 public record GetTagByIdQuery(Guid TagId) : IQuery<TagResponse>;
