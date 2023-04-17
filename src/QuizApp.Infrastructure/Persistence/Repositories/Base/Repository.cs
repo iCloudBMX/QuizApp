@@ -5,7 +5,7 @@ namespace QuizApp.Infrastructure.Persistence.Repositories;
 
 public class Repository<T> : IRepository<T> where T : class
 {
-    private readonly ApplicationDbContext applicationDbContext;
+    protected readonly ApplicationDbContext applicationDbContext;
 
     public Repository(ApplicationDbContext applicationDbContext)
     {
