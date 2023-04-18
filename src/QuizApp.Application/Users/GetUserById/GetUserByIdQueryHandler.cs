@@ -26,7 +26,7 @@ public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserRespo
 
         if(maybeUser is null)
         {
-            Result.Failure<UserResponse>(
+           return Result.Failure<UserResponse>(
                 DomainErrors.User.NotFound(request.UserId));
         }
 

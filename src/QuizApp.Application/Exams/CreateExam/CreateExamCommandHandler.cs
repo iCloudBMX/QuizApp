@@ -2,6 +2,7 @@
 using FluentValidation;
 using QuizApp.Application.Abstractions;
 using QuizApp.Domain.Entities;
+using QuizApp.Domain.Errors;
 using QuizApp.Domain.Repositories;
 using QuizApp.Domain.Shared;
 
@@ -33,8 +34,6 @@ public class CreateExamCommandHandler : ICommandHandler<CreateExamCommand, Creat
         var result = validator.Validate(request);
         if (result.IsValid)
         {
-
-
             Exam mappedExam = mapper.Map<Exam>(request);
 
             mappedExam.Link = "smth";
@@ -50,9 +49,8 @@ public class CreateExamCommandHandler : ICommandHandler<CreateExamCommand, Creat
             string displey = "";
             result.Errors.ForEach(nm => displey += nm + "\n");
 
+            return Result.Failure<CreateExamResponse>(
+                DomainErrors.Exam.InvalidExamProperties(displey));
         }
-
-        return new CreateExamResponse(Guid.Parse("3fa85f64 - 5717 - 4562 - b3fc - 2c963f66afa6"), "problem");
-
     }
 }

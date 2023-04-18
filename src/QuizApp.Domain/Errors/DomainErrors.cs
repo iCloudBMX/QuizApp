@@ -10,4 +10,11 @@ public static class DomainErrors
             code: "User.NotFound",
             message: $"The user with the identifier {id} was not found.");
     }
+
+    public static class Exam
+    {
+        public static readonly Func<string, Error> InvalidExamProperties = errors => new Error(
+            code: "Exam properties is invalid",
+            message: errors);
+    }
 }
