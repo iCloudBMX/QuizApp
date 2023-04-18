@@ -8,6 +8,7 @@ public class Exam
     public DateTime EndsAt { get; set; }
     public DateTime Duration { get; set; }
     public string Link { get; set; }
+    public string Title { get; set; }
     public int QuestionCount { get; set; }
     public User Tester { get; set; }
     public ICollection<ExamAttendant> Attendants { get; set; }
