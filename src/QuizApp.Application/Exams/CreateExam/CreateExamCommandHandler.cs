@@ -2,19 +2,20 @@
 using FluentValidation;
 using QuizApp.Application.Abstractions;
 using QuizApp.Domain.Entities;
+using QuizApp.Domain.Errors;
 using QuizApp.Domain.Repositories;
 using QuizApp.Domain.Shared;
 
 namespace QuizApp.Application.Exams.CreateExam;
 
-public class ExamCreateCommandHandler : ICommandHandler<CreateExamCommand, ExamResponse>
+public class CreateExamCommandHandler : ICommandHandler<CreateExamCommand, CreateExamResponse>
 {
     private readonly IExamRepository examRepository;
     private readonly IUnitOfWork unitOfWork;
     private readonly IMapper mapper;
     private readonly IValidator<CreateExamCommand> validator;
 
-    public ExamCreateCommandHandler(
+    public CreateExamCommandHandler(
         IExamRepository examRepository,
         IMapper mapper,
         IUnitOfWork unitOfWork,
@@ -26,33 +27,34 @@ public class ExamCreateCommandHandler : ICommandHandler<CreateExamCommand, ExamR
         this.validator = validator;
     }
 
-    public async Task<Result<ExamResponse>> Handle(
+    public async Task<Result<CreateExamResponse>> Handle(
         CreateExamCommand request,
         CancellationToken cancellationToken)
     {
         var result = validator.Validate(request);
         if (result.IsValid)
         {
-
-
             Exam mappedExam = mapper.Map<Exam>(request);
 
             mappedExam.Link = "smth";
             examRepository.Insert(mappedExam);
 
-            ExamResponse examResponse = new ExamResponse(mappedExam.Id, mappedExam.Link);
+            CreateExamResponse examResponse = new CreateExamResponse(mappedExam.Id, mappedExam.Link);
             await unitOfWork.SaveChangesAsync(cancellationToken);
 
             return examResponse;
         }
         else
         {
-            string displey = "";
-            result.Errors.ForEach(nm => displey += nm + "\n");
+            string displey = string.Empty;
+            foreach(var item in result.Errors)
+            {
+                displey += item + "\n";
+            }
+            var errors = new Error("Validation error", displey);
 
+         return    Result.Failure<CreateExamResponse>(errors);
         }
-
-        return new ExamResponse(Guid.Parse("3fa85f64 - 5717 - 4562 - b3fc - 2c963f66afa6"),"problem");
 
     }
 }

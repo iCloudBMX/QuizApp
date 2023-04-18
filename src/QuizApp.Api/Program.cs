@@ -1,4 +1,3 @@
-using QuizApp.Api.Extensions;
 using QuizApp.Application;
 using QuizApp.Infrastructure;
 
