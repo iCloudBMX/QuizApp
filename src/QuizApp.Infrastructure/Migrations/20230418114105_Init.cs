@@ -39,6 +39,7 @@ namespace QuizApp.Infrastructure.Migrations
                     EndsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Duration = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Link = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QuestionCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
