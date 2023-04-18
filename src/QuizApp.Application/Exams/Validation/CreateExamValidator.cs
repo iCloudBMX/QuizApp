@@ -3,9 +3,9 @@ using QuizApp.Application.Exams.CreateExam;
 
 namespace QuizApp.Application.Exams.Validation
 {
-    public class ExamValidator : AbstractValidator<CreateExamCommand>
+    public class CreateExamValidator : AbstractValidator<CreateExamCommand>
     {
-        public ExamValidator()
+        public CreateExamValidator()
         {
             RuleFor(e => e.testerId).NotEmpty().NotEqual(default(Guid));
 
