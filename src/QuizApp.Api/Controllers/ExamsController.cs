@@ -7,10 +7,10 @@ using QuizApp.Domain.Shared;
 namespace QuizApp.Api.Controllers
 {
     [Route("api/exam")]
-    public class ExamsController :ApiController
+    public class ExamsController : ApiController
     {
-        public ExamsController(ISender sender) 
-            :base(sender)
+        public ExamsController(ISender sender)
+            : base(sender)
         {
         }
 
@@ -21,17 +21,17 @@ namespace QuizApp.Api.Controllers
         {
             var response = await Sender.Send(exam, cancellationToken);
 
-            return response.IsSuccess? Ok(response) : BadRequest(response);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult>GetExamById(
+        [HttpGet("{examId:guid}")]
+        public async Task<IActionResult> GetExamById(
             Guid examId,
             CancellationToken cancellationToken)
         {
-            var query=new GetExamByIdQuery(examId);
+            var query = new GetExamByIdQuery(examId);
 
-            Result<GetExamByIdResponse>response=
+            Result<GetExamByIdResponse> response =
                 await Sender.Send(query, cancellationToken);
 
             return response.IsSuccess ? Ok(response) : BadRequest(response);
