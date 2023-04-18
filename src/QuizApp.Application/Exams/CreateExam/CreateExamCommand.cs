@@ -7,5 +7,6 @@ public record CreateExamCommand(
     DateTime startsAt,
     DateTime endsAt,
     DateTime duration,
-    int QuestionCount) : ICommand<CreateExamResponse>;
+    int QuestionCount,
+    string title) : ICommand<CreateExamResponse>;
 

@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Exams.CreateExam;
+using QuizApp.Application.Exams.GetExamById;
+using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers
 {
@@ -20,6 +22,20 @@ namespace QuizApp.Api.Controllers
             var response = await Sender.Send(exam, cancellationToken);
 
             return response.IsSuccess? Ok(response) : BadRequest(response);
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult>GetExamById(
+            Guid examId,
+            CancellationToken cancellationToken)
+        {
+            var query=new GetExamByIdQuery(examId);
+
+            Result<GetExamByIdResponse>response=
+                await Sender.Send(query, cancellationToken);
+
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+
         }
     }
 }

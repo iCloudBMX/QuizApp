@@ -12,7 +12,7 @@ using QuizApp.Infrastructure.Persistence;
 namespace QuizApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230412130608_Init")]
+    [Migration("20230418114105_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -111,6 +111,10 @@ namespace QuizApp.Infrastructure.Migrations
 
                     b.Property<Guid>("TesterId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
