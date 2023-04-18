@@ -16,7 +16,7 @@ public static class Dependencies
 
         services.AddAutoMapper(typeof(MappingProfile));
 
-        services.AddScoped<IValidator<CreateExamCommand>, ExamValidator>();
+        services.AddScoped<IValidator<CreateExamCommand>, CreateExamValidator>();
 
         return services;
     }
