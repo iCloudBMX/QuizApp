@@ -8,12 +8,12 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.ToTable("Users");
+
         builder.HasKey(p => p.Id);
 
         builder.HasIndex(u => u.Phone)
             .IsUnique();
-
-        builder.ToTable("Users");
 
         builder.Property(u => u.FirstName)
             .IsRequired()
@@ -31,5 +31,13 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(u => u.LastLogin)
             .IsRequired();
+
+        builder
+            .Property(u => u.Email)
+            .IsRequired(true);
+
+        builder
+            .HasIndex(u => u.Email)
+            .IsUnique(true);
     }
 }

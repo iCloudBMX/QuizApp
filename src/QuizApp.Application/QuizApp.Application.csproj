@@ -19,4 +19,9 @@
     <ProjectReference Include="..\QuizApp.Domain\QuizApp.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="OtpCodes\" />
+    <Folder Include="Users\Register\" />
+  </ItemGroup>
+
 </Project>

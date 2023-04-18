@@ -4,18 +4,43 @@ namespace QuizApp.Domain.Entities;
 
 public class User
 {
-    public Guid Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Phone { get; set; }
-    public UserRole Roles { get; set; }
-    public string PasswordHash { get; set; }
-    public DateTime RegisteredAt { get; set; }
-    public DateTime LastLogin { get; set; }
+    public Guid Id { get; private set; }
+    public string FirstName { get; private set; }
+    public string LastName { get; private set; }
+    public string Phone { get; private set; }
+    public string Email { get; private set; }
+    public UserRole Role { get; private set; }
+    public string PasswordHash { get; private set; }
+    public DateTime RegisteredAt { get; } = DateTime.Now;
+    public DateTime? LastLogin { get; private set; }
 
-    public ICollection<Question> Questions { get; set; }
-    public ICollection<Tag> Tags { get; set; }
-    public ICollection<Exam> Exams { get; set; }
+    public ICollection<Question> Questions { get; private set; } =
+        new List<Question>();
+
+    public ICollection<Tag> Tags { get; private set; } = 
+        new List<Tag>();
+
+    public ICollection<Exam> Exams { get; private set; } =
+        new List<Exam>(); 
+
+    public ICollection<OtpCode> OtpCodes { get; private set; } = 
+        new List<OtpCode>(); 
+
+    public User(
+        string firstName,
+        string lastName,
+        string phone,
+        string email,
+        string passwordHash,
+        UserRole role)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Phone = phone;
+        Email = email;
+        PasswordHash = passwordHash;
+        Role = role;
+    }
 }
 
 
