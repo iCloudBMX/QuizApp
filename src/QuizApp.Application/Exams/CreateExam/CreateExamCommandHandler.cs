@@ -46,11 +46,14 @@ public class CreateExamCommandHandler : ICommandHandler<CreateExamCommand, Creat
         }
         else
         {
-            string displey = "";
-            result.Errors.ForEach(nm => displey += nm + "\n");
+            string displey = string.Empty;
+            foreach(var item in result.Errors)
+            {
+                displey += item + "\n";
+            }
+            var errors = new Error("Validation error", displey);
 
-         return    Result.Failure<CreateExamResponse>(
-                DomainErrors.Exam.InvalidExamProperties(displey));
+         return    Result.Failure<CreateExamResponse>(errors);
         }
 
     }
