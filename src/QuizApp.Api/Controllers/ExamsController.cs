@@ -5,9 +5,9 @@ using QuizApp.Application.Exams.CreateExam;
 namespace QuizApp.Api.Controllers
 {
     [Route("api/exam")]
-    public class ExamController :ApiController
+    public class ExamsController :ApiController
     {
-        public ExamController(ISender sender) 
+        public ExamsController(ISender sender) 
             :base(sender)
         {
         }
