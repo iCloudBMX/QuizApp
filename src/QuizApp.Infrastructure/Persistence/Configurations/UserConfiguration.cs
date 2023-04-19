@@ -30,7 +30,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder.Property(u => u.LastLogin)
-            .IsRequired();
+            .IsRequired(false);
 
         builder
             .Property(u => u.Email)

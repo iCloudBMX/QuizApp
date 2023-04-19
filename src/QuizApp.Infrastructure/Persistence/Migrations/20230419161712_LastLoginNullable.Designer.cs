@@ -12,8 +12,8 @@ using QuizApp.Infrastructure.Persistence;
 namespace QuizApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230418151327_Initial")]
-    partial class Initial
+    [Migration("20230419161712_LastLoginNullable")]
+    partial class LastLoginNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -266,7 +266,7 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<DateTime>("LastLogin")
+                    b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
@@ -286,7 +286,10 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("RegisteredAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Roles")
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

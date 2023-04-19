@@ -1,5 +1,8 @@
 ﻿using QuizApp.Application.Abstractions;
+using QuizApp.Application.Helpers;
 using QuizApp.Domain.Entities;
+using QuizApp.Domain.Enums;
+using QuizApp.Domain.Interfaces;
 using QuizApp.Domain.Repositories;
 using QuizApp.Domain.Shared;
 
@@ -9,23 +12,47 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 {
     private readonly IUserRepository userRepository;
     private readonly IUnitOfWork unitOfWork;
-    private readonly IOtpCodeRepository otpCodeRepository;
+    private readonly IEmailService emailService;
 
     public RegisterUserCommandHandler(
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        IOtpCodeRepository otpCodeRepository)
+        IEmailService emailService)
     {
         this.userRepository = userRepository;
         this.unitOfWork = unitOfWork;
-        this.otpCodeRepository = otpCodeRepository;
+        this.emailService = emailService;
     }
 
-    public Task<Result<Guid>> Handle(
+    public async Task<Result<Guid>> Handle(
         RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
+        string passwordHash = request.Password;
+        
         var newUser = new User(
-            )
+            request.FirstName,
+            request.LastName,
+            request.PhoneNumber,
+            request.Email,
+            passwordHash,
+            UserRole.Tester);
+
+        this.userRepository.Insert(newUser);
+
+        var newOtpCode = new OtpCode(
+            OtpCodeHelper.GenerateOtpCode());
+
+        newUser.OtpCodes.Add(newOtpCode);
+        await this.unitOfWork.SaveChangesAsync(cancellationToken);
+
+        var mailRequest = new MailRequest(
+            request.Email,
+            "New User Registration",
+            $"Your verification code is {newOtpCode.Code}");
+
+        await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
+
+        return newUser.Id;
     }
 }

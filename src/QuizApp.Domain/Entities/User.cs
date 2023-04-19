@@ -13,6 +13,7 @@ public class User
     public string PasswordHash { get; private set; }
     public DateTime RegisteredAt { get; } = DateTime.Now;
     public DateTime? LastLogin { get; private set; }
+    public UserStatus Status { get; private set; }
 
     public ICollection<Question> Questions { get; private set; } =
         new List<Question>();
@@ -24,7 +25,7 @@ public class User
         new List<Exam>(); 
 
     public ICollection<OtpCode> OtpCodes { get; private set; } = 
-        new List<OtpCode>(); 
+        new List<OtpCode>();
 
     public User(
         string firstName,
@@ -40,7 +41,10 @@ public class User
         Email = email;
         PasswordHash = passwordHash;
         Role = role;
+        Status = UserStatus.New;
     }
+
+    public void MarkAsActive() => Status = UserStatus.Active;
 }
 
 
