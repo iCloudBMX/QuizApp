@@ -3,5 +3,4 @@ public record GetQuestionByIdResponse(
     Guid Id,
     int Type,
     int Level,
-    string Content,
-    DateTime CreateAt);
+    string Content);

@@ -28,8 +28,7 @@ public class GetQuestionByIdQueryHandler : IQueryHandler<GetQuestionByIdQuery, G
             isquestion.Id,
             ((int)isquestion.Type),
             ((int)isquestion.Level),
-            isquestion.Content,
-            isquestion.CreatedAt);
+            isquestion.Content);
 
         return response;
     }
