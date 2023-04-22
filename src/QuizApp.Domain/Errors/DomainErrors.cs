@@ -11,6 +11,24 @@ public static class DomainErrors
             message: $"The user with the identifier {id} was not found.");
     }
 
+    public static class OtpCode
+    {
+        public static readonly Func<Error> InValid = () => new Error(
+            code: "Otp.InValid",
+            message: "Invalid otp code");
+
+        public static readonly Func<Error> Expired = () => new Error(
+            code: "Otp.Expired",
+            message: "Expired otp code");
+    }
+
+    public static class Tag
+    {
+        public static readonly Func<Guid, Error> NotFound = id => new Error(
+            code: "Tag.NotFound",
+            message: $"The tag with the identifier {id} was not found.");
+    }
+
     public static class Exam
     {
         public static readonly Func<string, Error> InvalidExamProperties = errors => new Error(

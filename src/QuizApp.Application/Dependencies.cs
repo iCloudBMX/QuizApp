@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using QuizApp.Application.AutoMapper;
+using QuizApp.Application.ExamAttendants;
+using QuizApp.Application.ExamAttendants.Validation;
 using QuizApp.Application.Exams.CreateExam;
 using QuizApp.Application.Exams.Validation;
 
@@ -15,6 +17,8 @@ public static class Dependencies
         services.AddMediatR(typeof(Dependencies).Assembly);
 
         services.AddAutoMapper(typeof(MappingProfile));
+
+        services.AddScoped<IValidator<CreateExamAttendantCommand>, ExamAttendantValidator>();
 
         services.AddScoped<IValidator<CreateExamCommand>, CreateExamValidator>();
 
