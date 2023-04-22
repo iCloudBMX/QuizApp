@@ -21,4 +21,10 @@ public static class DomainErrors
             code: "Exam.NotFound",
             message: $"The exam with the identifier {id} was not found.");
     }
+    public static class Question
+    {
+        public static readonly Func<Guid, Error> NotFound = id => new Error(
+            code: "Question.NotFound",
+            message: $"The Question with the identifier {id} was not found.");
+    }
 }
