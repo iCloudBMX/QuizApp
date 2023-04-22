@@ -6,6 +6,8 @@ using QuizApp.Application.ExamAttendants;
 using QuizApp.Application.ExamAttendants.Validation;
 using QuizApp.Application.Exams.CreateExam;
 using QuizApp.Application.Exams.Validation;
+using QuizApp.Application.Questions.CreateQuestion;
+using QuizApp.Application.Questions.Validation;
 
 namespace QuizApp.Application;
 
@@ -21,6 +23,8 @@ public static class Dependencies
         services.AddScoped<IValidator<CreateExamAttendantCommand>, ExamAttendantValidator>();
 
         services.AddScoped<IValidator<CreateExamCommand>, CreateExamValidator>();
+
+        services.AddScoped<IValidator<CreateQuestionCommand>, CreateQuestionValidator>();
 
         return services;
     }
