@@ -29,6 +29,12 @@ public class ExamAttendantController : ApiController
     {
         var query = new GetExamAttendantByExamQuery(examId);
         var response = await Sender.Send(query, token);
-        return response.IsSuccess ? Ok(response) : BadRequest(response.Error);
+
+        if(response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+
+        return Ok(response);
     }
 }

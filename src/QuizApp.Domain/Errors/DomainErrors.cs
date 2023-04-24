@@ -28,7 +28,6 @@ public static class DomainErrors
             code: "Tag.NotFound",
             message: $"The tag with the identifier {id} was not found.");
     }
-
     public static class Exam
     {
         public static readonly Func<string, Error> InvalidExamProperties = errors => new Error(
