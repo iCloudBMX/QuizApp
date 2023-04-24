@@ -40,9 +40,7 @@ public class GetExamByIdQueryHandler : IQueryHandler<GetExamByIdQuery, GetExamBy
             maybeExam.Duration,
             maybeExam.Link,
             maybeExam.Title,
-            maybeExam.QuestionCount,
-            maybeExam.Attendants,
-            maybeExam.Questions);
+            maybeExam.QuestionCount);
 
         return response;
 
