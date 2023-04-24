@@ -28,10 +28,6 @@ public static class DomainErrors
             code: "Tag.NotFound",
             message: $"The tag with the identifier {id} was not found.");
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> fb192f169b0e9aefdc1315e7112e81258cc508c4
     public static class Exam
     {
         public static readonly Func<string, Error> InvalidExamProperties = errors => new Error(
@@ -42,14 +38,10 @@ public static class DomainErrors
             code: "Exam.NotFound",
             message: $"The exam with the identifier {id} was not found.");
     }
-<<<<<<< HEAD
-
-=======
     public static class Question
     {
         public static readonly Func<Guid, Error> NotFound = id => new Error(
             code: "Question.NotFound",
             message: $"The Question with the identifier {id} was not found.");
     }
->>>>>>> fb192f169b0e9aefdc1315e7112e81258cc508c4
 }
