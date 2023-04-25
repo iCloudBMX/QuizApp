@@ -8,6 +8,7 @@ using QuizApp.Application.Exams.CreateExam;
 using QuizApp.Application.Exams.Validations;
 using QuizApp.Application.OtpCodes.Validations;
 using QuizApp.Application.Questions.CreateQuestion;
+using QuizApp.Application.Questions.UpdateQuestion;
 using QuizApp.Application.Questions.Validations;
 using QuizApp.Application.Users.Register;
 using QuizApp.Application.Users.Validations;
@@ -28,6 +29,7 @@ public static class Dependencies
         services.AddScoped<IValidator<CreateExamCommand>, CreateExamValidator>();
 
         services.AddScoped<IValidator<CreateQuestionCommand>, CreateQuestionValidator>();
+        services.AddScoped<IValidator<UpdateQuestionCommand>, UpdateQuestionValidator>();
 
         services.AddScoped<IValidator<RegisterUserCommand>, RegisterUserValidator>();
 

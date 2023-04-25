@@ -38,7 +38,7 @@ public static class Dependencies
         services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
 
         services.AddTransient<IEmailService, EmailService>();
-        
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddTransient<IUserRepository, UserRepository>();
