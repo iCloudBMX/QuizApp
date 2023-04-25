@@ -2,9 +2,9 @@
 using FluentValidation;
 using QuizApp.Application.Abstractions;
 using QuizApp.Domain.Entities;
-using QuizApp.Domain.Errors;
 using QuizApp.Domain.Repositories;
 using QuizApp.Domain.Shared;
+using System.Text;
 
 namespace QuizApp.Application.Exams.CreateExam;
 
@@ -46,14 +46,14 @@ public class CreateExamCommandHandler : ICommandHandler<CreateExamCommand, Creat
         }
         else
         {
-            string displey = string.Empty;
-            foreach(var item in result.Errors)
+            StringBuilder validateErrors = new StringBuilder();
+            foreach (var item in result.Errors)
             {
-                displey += item + "\n";
+                validateErrors.AppendLine(item.ErrorMessage);
             }
-            var errors = new Error("Validation error", displey);
+            var errors = new Error("Validation error", validateErrors.ToString());
 
-         return    Result.Failure<CreateExamResponse>(errors);
+            return Result.Failure<CreateExamResponse>(errors);
         }
 
     }

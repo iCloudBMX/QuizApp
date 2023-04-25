@@ -1,10 +1,12 @@
-﻿using QuizApp.Application.Abstractions;
+﻿using FluentValidation;
+using QuizApp.Application.Abstractions;
 using QuizApp.Application.Helpers;
 using QuizApp.Domain.Entities;
 using QuizApp.Domain.Enums;
 using QuizApp.Domain.Interfaces;
 using QuizApp.Domain.Repositories;
 using QuizApp.Domain.Shared;
+using System.Text;
 
 namespace QuizApp.Application.Users.Register;
 
@@ -13,46 +15,66 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
     private readonly IUserRepository userRepository;
     private readonly IUnitOfWork unitOfWork;
     private readonly IEmailService emailService;
+    private readonly IValidator<RegisterUserCommand> validator;
 
     public RegisterUserCommandHandler(
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        IEmailService emailService)
+        IEmailService emailService,
+        IValidator<RegisterUserCommand> validator)
     {
         this.userRepository = userRepository;
         this.unitOfWork = unitOfWork;
         this.emailService = emailService;
+        this.validator = validator;
     }
 
     public async Task<Result<Guid>> Handle(
         RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
-        string passwordHash = request.Password;
-        
-        var newUser = new User(
-            request.FirstName,
-            request.LastName,
-            request.PhoneNumber,
-            request.Email,
-            passwordHash,
-            UserRole.Tester);
+        var valideResult = validator.Validate(request);
 
-        this.userRepository.Insert(newUser);
+        if (valideResult.IsValid)
+        {
+            string passwordHash = request.Password;
 
-        var newOtpCode = new OtpCode(
-            OtpCodeHelper.GenerateOtpCode());
+            var newUser = new User(
+                request.FirstName,
+                request.LastName,
+                request.PhoneNumber,
+                request.Email,
+                passwordHash,
+                UserRole.Tester);
 
-        newUser.OtpCodes.Add(newOtpCode);
-        await this.unitOfWork.SaveChangesAsync(cancellationToken);
+            this.userRepository.Insert(newUser);
 
-        var mailRequest = new MailRequest(
-            request.Email,
-            "New User Registration",
-            $"Your verification code is {newOtpCode.Code}");
+            var newOtpCode = new OtpCode(
+                OtpCodeHelper.GenerateOtpCode());
 
-        await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
+            newUser.OtpCodes.Add(newOtpCode);
+            await this.unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return newUser.Id;
+            var mailRequest = new MailRequest(
+                request.Email,
+                "New User Registration",
+                $"Your verification code is {newOtpCode.Code}");
+
+            await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
+
+            return newUser.Id;
+        }
+        else
+        {
+            StringBuilder validateErrors = new StringBuilder();
+            foreach (var item in valideResult.Errors)
+            {
+                validateErrors.AppendLine(item.ErrorMessage);
+            }
+
+            var errors = new Error("Validation error", validateErrors.ToString());
+
+            return Result.Failure<Guid>(errors);
+        }
     }
 }
