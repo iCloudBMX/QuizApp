@@ -10,6 +10,4 @@ public record GetExamByIdResponse(
     DateTime duration,
     string link,
     string title,
-    int questionCount,
-    ICollection<ExamAttendant> attendants,
-    ICollection<Question> questions);
+    int questionCount);

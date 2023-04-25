@@ -7,6 +7,5 @@ internal sealed class OtpCodeRepository : Repository<OtpCode>, IOtpCodeRepositor
 {
 	public OtpCodeRepository(ApplicationDbContext applicationDbContext)
 		: base(applicationDbContext)
-	{
-	}
+	{ }
 }

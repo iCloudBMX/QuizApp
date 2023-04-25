@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using QuizApp.Domain.Entities;
+using QuizApp.Infrastructure.Persistence.Constants;
 
 namespace QuizApp.Infrastructure.Persistence.Configurations;
 
@@ -8,33 +9,35 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable("Users");
+        builder.ToTable(TableNames.Users);
 
         builder.HasKey(p => p.Id);
 
         builder.HasIndex(u => u.Phone)
-            .IsUnique();
+            .IsUnique(true);
 
         builder.Property(u => u.FirstName)
-            .IsRequired()
-            .HasMaxLength(30);
+            .IsRequired(true)
+            .HasMaxLength(50);
 
         builder.Property(u => u.LastName)
-            .HasMaxLength(30);
+            .IsRequired(true)
+            .HasMaxLength(50);
 
         builder.Property(u => u.PasswordHash)
-            .IsRequired()
+            .IsRequired(true)
             .HasMaxLength(50);
 
         builder.Property(u => u.RegisteredAt)
-            .IsRequired();
+            .IsRequired(true);
 
         builder.Property(u => u.LastLogin)
             .IsRequired(false);
 
         builder
             .Property(u => u.Email)
-            .IsRequired(true);
+            .IsRequired(true)
+            .HasMaxLength(100);
 
         builder
             .HasIndex(u => u.Email)

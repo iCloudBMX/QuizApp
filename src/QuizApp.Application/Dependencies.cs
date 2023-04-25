@@ -5,10 +5,13 @@ using QuizApp.Application.AutoMapper;
 using QuizApp.Application.ExamAttendants;
 using QuizApp.Application.ExamAttendants.Validation;
 using QuizApp.Application.Exams.CreateExam;
-using QuizApp.Application.Exams.Validation;
+using QuizApp.Application.Exams.Validations;
+using QuizApp.Application.OtpCodes.Validations;
 using QuizApp.Application.Questions.CreateQuestion;
 using QuizApp.Application.Questions.UpdateQuestion;
-using QuizApp.Application.Questions.Validation;
+using QuizApp.Application.Questions.Validations;
+using QuizApp.Application.Users.Register;
+using QuizApp.Application.Users.Validations;
 
 namespace QuizApp.Application;
 
@@ -27,6 +30,10 @@ public static class Dependencies
 
         services.AddScoped<IValidator<CreateQuestionCommand>, CreateQuestionValidator>();
         services.AddScoped<IValidator<UpdateQuestionCommand>, UpdateQuestionValidator>();
+
+        services.AddScoped<IValidator<RegisterUserCommand>, RegisterUserValidator>();
+
+        services.AddScoped<IValidator<VerifyOtpCodeCommand>, VerifyOtpCodeValidator>();
 
         return services;
     }
