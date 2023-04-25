@@ -1,8 +1,11 @@
-﻿using QuizApp.Application.Abstractions;
+﻿using FluentValidation;
+using QuizApp.Application.Abstractions;
+using QuizApp.Application.Exams.CreateExam;
 using QuizApp.Domain.Entities;
 using QuizApp.Domain.Errors;
 using QuizApp.Domain.Repositories;
 using QuizApp.Domain.Shared;
+using System.Text;
 
 namespace QuizApp.Application;
 
@@ -11,21 +14,28 @@ internal class VerifyOtpCodeCommandHandler : ICommandHandler<VerifyOtpCodeComman
     private readonly IUserRepository userRepository;
     private readonly IUnitOfWork unitOfWork;
     private readonly IOtpCodeRepository otpCodeRepository;
+    private readonly IValidator<VerifyOtpCodeCommand> validator;
 
     public VerifyOtpCodeCommandHandler(
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        IOtpCodeRepository otpCodeRepository)
+        IOtpCodeRepository otpCodeRepository,
+        IValidator<VerifyOtpCodeCommand> validator)
     {
         this.userRepository = userRepository;
         this.unitOfWork = unitOfWork;
         this.otpCodeRepository = otpCodeRepository;
+        this.validator = validator;
     }
 
     public async Task<Result<Guid>> Handle(
         VerifyOtpCodeCommand request,
         CancellationToken cancellationToken)
     {
+        var validateResult=validator.Validate(request);
+        if(validateResult.IsValid)
+        {
+
         User maybeUser = await this.userRepository
             .SelectUserWithOtpCodesAsync(request.UserId);
 
@@ -70,5 +80,17 @@ internal class VerifyOtpCodeCommandHandler : ICommandHandler<VerifyOtpCodeComman
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
 
         return maybeUser.Id;
+        }
+        else
+        {
+            StringBuilder validateErrors = new StringBuilder();
+            foreach (var item in validateResult.Errors)
+            {
+                validateErrors.AppendLine(item.ErrorMessage);
+            }
+            var errors = new Error("Validation error", validateErrors.ToString());
+
+            return Result.Failure<Guid>(errors);
+        }
     }
 }
