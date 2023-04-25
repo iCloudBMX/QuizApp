@@ -21,7 +21,12 @@ namespace QuizApp.Api.Controllers
         {
             var response = await Sender.Send(exam, cancellationToken);
 
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            if (response.IsFailure)
+            {
+                return HandleFailure(response);
+            }
+
+            return Ok(response);
         }
 
         [HttpGet("{examId:guid}")]
@@ -34,13 +39,10 @@ namespace QuizApp.Api.Controllers
             Result<GetExamByIdResponse> response =
                 await Sender.Send(query, cancellationToken);
 
-            if(response.IsFailure)
+            if (response.IsFailure)
             {
                 return HandleFailure(response);
             }
 
-            return response.IsSuccess ? Ok(response) : NotFound();
-
-        }
+            return Ok(response)}
     }
-}

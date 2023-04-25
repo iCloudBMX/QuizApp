@@ -22,6 +22,11 @@ public class UsersController : ApiController
 
         Result<UserResponse> response = await Sender.Send(query, cancellationToken);
 
-        return response.IsSuccess ? Ok(response) : NotFound(response.Error);
+        if (response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+
+        return Ok(response);
     }
 }

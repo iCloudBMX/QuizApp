@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Tags.GetTagById;
 using QuizApp.Domain.Shared;
@@ -20,9 +19,14 @@ public class TagsController : ApiController
     {
         var query = new GetTagByIdQuery(id);
 
-        Result<TagResponse> response = await Sender.Send(query,cancellationToken);
+        Result<TagResponse> response = await Sender.Send(query, cancellationToken);
 
-        return response.IsSuccess? Ok(response) : NotFound(response.Error);
+        if (response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+
+        return Ok(response);
 
     }
 }
