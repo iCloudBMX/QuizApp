@@ -17,24 +17,30 @@ public class QuestionController : ApiController
         CreateQuestionCommand request,
         CancellationToken cancellationToken)
     {
-        var response = await Sender.Send(request, cancellationToken);
+        Result<CreateQuestionResponse> response =
+            await Sender.Send(request, cancellationToken);
 
-        return response.IsSuccess
-            ? Ok(response)
-            : BadRequest(response);
+        if (response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+        return Ok(response);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetQuestionById(
-        Guid id, 
+        Guid id,
         CancellationToken cancellationToken)
     {
         var query = new GetQuestionByIdQuery(id);
 
         Result<GetQuestionByIdResponse> response = await Sender.Send(query, cancellationToken);
 
-        return response.IsSuccess
-            ? Ok(response)
-            : BadRequest(response);
+        if (response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+
+        return Ok(response);
     }
 }

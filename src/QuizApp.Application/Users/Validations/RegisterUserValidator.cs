@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using QuizApp.Application.Users.Register;
 
-namespace QuizApp.Application.Users.Validation
+namespace QuizApp.Application.Users.Validations
 {
     internal class RegisterUserValidator : AbstractValidator<RegisterUserCommand>
     {

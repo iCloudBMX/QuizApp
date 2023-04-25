@@ -20,7 +20,11 @@ public class ExamAttendantController : ApiController
     {
         Result<ExamAttendantResponse> response = await Sender.Send(command, token);
 
-        return response.IsSuccess ? Ok(response) : BadRequest(response.Error);
+        if(response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+        return Ok(response);
     }
     [HttpGet("examId:Guid")]
     public async ValueTask<IActionResult> GetExamApplicantByExamId(
