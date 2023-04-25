@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Questions.CreateQuestion;
 using QuizApp.Application.Questions.GetQuestionById;
+using QuizApp.Application.Questions.UpdateQuestion;
 using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers;
@@ -15,6 +16,18 @@ public class QuestionController : ApiController
     [HttpPost]
     public async ValueTask<IActionResult> CreateQuestion(
         CreateQuestionCommand request,
+        CancellationToken cancellationToken)
+    {
+        var response = await Sender.Send(request, cancellationToken);
+
+        return response.IsSuccess
+            ? Ok(response)
+            : BadRequest(response);
+    }
+
+    [HttpPut]
+    public async ValueTask<IActionResult> PutQuestion(
+        UpdateQuestionCommand request,
         CancellationToken cancellationToken)
     {
         var response = await Sender.Send(request, cancellationToken);
