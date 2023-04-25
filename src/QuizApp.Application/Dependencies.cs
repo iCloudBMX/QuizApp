@@ -5,12 +5,12 @@ using QuizApp.Application.AutoMapper;
 using QuizApp.Application.ExamAttendants;
 using QuizApp.Application.ExamAttendants.Validation;
 using QuizApp.Application.Exams.CreateExam;
-using QuizApp.Application.Exams.Validation;
-using QuizApp.Application.OtpCodes.Validation;
+using QuizApp.Application.Exams.Validations;
+using QuizApp.Application.OtpCodes.Validations;
 using QuizApp.Application.Questions.CreateQuestion;
-using QuizApp.Application.Questions.Validation;
+using QuizApp.Application.Questions.Validations;
 using QuizApp.Application.Users.Register;
-using QuizApp.Application.Users.Validation;
+using QuizApp.Application.Users.Validations;
 
 namespace QuizApp.Application;
 

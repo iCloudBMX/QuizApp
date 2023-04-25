@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace QuizApp.Application.OtpCodes.Validation
+namespace QuizApp.Application.OtpCodes.Validations
 {
     public class VerifyOtpCodeValidator : AbstractValidator<VerifyOtpCodeCommand>
     {

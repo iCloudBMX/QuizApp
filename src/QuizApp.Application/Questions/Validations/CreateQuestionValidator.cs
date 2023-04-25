@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuizApp.Application.Questions.Validation;
+namespace QuizApp.Application.Questions.Validations;
 public class CreateQuestionValidator : AbstractValidator<CreateQuestionCommand>
 {
     public CreateQuestionValidator()

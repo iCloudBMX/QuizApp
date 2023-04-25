@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using QuizApp.Application.Exams.CreateExam;
 
-namespace QuizApp.Application.Exams.Validation
+namespace QuizApp.Application.Exams.Validations
 {
     public class CreateExamValidator : AbstractValidator<CreateExamCommand>
     {
