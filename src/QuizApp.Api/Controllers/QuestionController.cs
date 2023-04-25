@@ -20,9 +20,10 @@ public class QuestionController : ApiController
     {
         var response = await Sender.Send(request, cancellationToken);
 
-        return response.IsSuccess
-            ? Ok(response)
-            : BadRequest(response);
+        if(response.IsFailure)
+            return HandleFailure(response);
+
+        return Ok(response);
     }
 
     [HttpPut]
@@ -32,9 +33,10 @@ public class QuestionController : ApiController
     {
         var response = await Sender.Send(request, cancellationToken);
 
-        return response.IsSuccess
-            ? Ok(response)
-            : BadRequest(response);
+        if (response.IsFailure)
+            return HandleFailure(response);
+
+        return Ok(response);
     }
 
     [HttpGet("{id:guid}")]
@@ -44,10 +46,11 @@ public class QuestionController : ApiController
     {
         var query = new GetQuestionByIdQuery(id);
 
-        Result<GetQuestionByIdResponse> response = await Sender.Send(query, cancellationToken);
+        var response = await Sender.Send(query, cancellationToken);
 
-        return response.IsSuccess
-            ? Ok(response)
-            : BadRequest(response);
+        if (response.IsFailure)
+            return HandleFailure(response);
+
+        return Ok(response);
     }
 }
