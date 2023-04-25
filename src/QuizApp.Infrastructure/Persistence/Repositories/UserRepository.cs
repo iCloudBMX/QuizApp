@@ -8,8 +8,7 @@ internal class UserRepository : Repository<User>, IUserRepository
 {
     public UserRepository(ApplicationDbContext applicationDbContext)
         : base(applicationDbContext)
-    {
-    }
+    { }
 
     public async Task<User> SelectUserWithOtpCodesAsync(Guid userId)
     {

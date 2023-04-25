@@ -7,6 +7,5 @@ internal class AttendantAnswerRepository : Repository<AttendantAnswer>, IAttenda
 {
     public AttendantAnswerRepository(ApplicationDbContext applicationDbContext)
         : base(applicationDbContext)
-    {
-    }
+    { }
 }

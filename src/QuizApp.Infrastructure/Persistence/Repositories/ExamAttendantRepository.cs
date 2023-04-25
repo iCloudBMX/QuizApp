@@ -8,8 +8,7 @@ internal class ExamAttendantRepository : Repository<ExamAttendant>, IExamAttenda
 {
     public ExamAttendantRepository(ApplicationDbContext applicationDbContext)
         : base(applicationDbContext)
-    {
-    }
+    { }
 
     public async ValueTask<IQueryable<ExamAttendant>> SelectAsync()
     {
