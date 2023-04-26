@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.ExamAttendants;
+using QuizApp.Application.ExamAttendants.GetExamAttendantByToken;
 using QuizApp.Application.ExamAttendants.GetExamAttendantsByExam;
 
 namespace QuizApp.Api.Controllers;
@@ -37,6 +38,18 @@ public class ExamAttendantController : ApiController
         {
             return HandleFailure(response);
         }
+
+        return Ok(response);
+    }
+
+    [HttpGet("token:string")]
+    public async ValueTask<IActionResult> GetExamAttendantByToken(
+        GetExamAttendantByTokenQuery query,
+        CancellationToken token)
+    {
+        var response=await Sender.Send(query, token);
+        if( response.IsFailure)
+            return HandleFailure(response);
 
         return Ok(response);
     }
