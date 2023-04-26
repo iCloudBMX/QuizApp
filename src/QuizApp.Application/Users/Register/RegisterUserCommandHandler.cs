@@ -37,13 +37,19 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 
         if (valideResult.IsValid)
         {
-            string passwordHash = request.Password;
+            string randomSalt = Guid.NewGuid().ToString();
+
+            string passwordHash =
+                PasswordHasher.CreatePasswordHash(
+                    password: request.Password,
+                    randomSalt);
 
             var newUser = new User(
                 request.FirstName,
                 request.LastName,
                 request.PhoneNumber,
                 request.Email,
+                randomSalt,
                 passwordHash,
                 UserRole.Tester);
 
