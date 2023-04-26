@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.ExamAttendants;
 using QuizApp.Application.ExamAttendants.GetExamAttendantsByExam;
-using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers;
 
@@ -18,7 +17,7 @@ public class ExamAttendantController : ApiController
         CreateExamAttendantCommand command,
         CancellationToken token)
     {
-        Result<ExamAttendantResponse> response = await Sender.Send(command, token);
+        var response = await Sender.Send(command, token);
 
         if(response.IsFailure)
         {
@@ -27,7 +26,7 @@ public class ExamAttendantController : ApiController
         return Ok(response);
     }
     [HttpGet("examId:Guid")]
-    public async ValueTask<IActionResult> GetExamApplicantByExamId(
+    public async ValueTask<IActionResult> GetExamAttendantByExamId(
         Guid examId,
         CancellationToken token)
     {
