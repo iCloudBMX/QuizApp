@@ -1,15 +1,24 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Domain.Shared;
+using System.Text;
 
 namespace QuizApp.Api.Controllers;
 
 [ApiController]
 public abstract class ApiController : ControllerBase
 {
-    protected readonly ISender Sender;
+    private readonly ISender sender;
+    private readonly IServiceProvider serviceProvider;
 
-    protected ApiController(ISender sender) => Sender = sender;
+    protected ApiController(
+        ISender sender,
+        IServiceProvider serviceProvider)
+    {
+        this.sender = sender;
+        this.serviceProvider = serviceProvider;
+    }
 
     protected IActionResult HandleFailure(Result result) =>
         result switch
@@ -28,6 +37,34 @@ public abstract class ApiController : ControllerBase
                         StatusCodes.Status400BadRequest,
                         result.Error))
         };
+
+    protected async Task<Result<TResponse>> HandleAsync<TResponse, TRequest>(
+        TRequest request,
+        CancellationToken cancellationToken)
+            where TRequest : IRequest<Result<TResponse>>
+    {
+        var validator = this.serviceProvider
+            .GetRequiredService<AbstractValidator<TRequest>>();
+
+        var validationResultResult = await validator?
+            .ValidateAsync(request, cancellationToken);
+
+        if(validationResultResult?.IsValid is false)
+        {
+            StringBuilder validateErrors = new StringBuilder();
+            foreach (var item in validationResultResult.Errors)
+            {
+                validateErrors.AppendLine(item.ErrorMessage);
+            }
+
+            var errors = new Error("Validation error", validateErrors.ToString());
+
+            return Result.Failure<TResponse>(errors);
+        }
+
+        return await this.sender
+            .Send(request, cancellationToken);
+    }
 
     private static ProblemDetails CreateProblemDetails(
         string title,

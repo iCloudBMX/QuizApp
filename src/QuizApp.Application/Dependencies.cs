@@ -29,7 +29,6 @@ public static class Dependencies
         services.AddScoped<IValidator<CreateExamCommand>, CreateExamValidator>();
 
         services.AddScoped<IValidator<CreateQuestionCommand>, CreateQuestionValidator>();
-        services.AddScoped<IValidator<UpdateQuestionCommand>, UpdateQuestionValidator>();
 
         services.AddScoped<IValidator<RegisterUserCommand>, RegisterUserValidator>();
 
