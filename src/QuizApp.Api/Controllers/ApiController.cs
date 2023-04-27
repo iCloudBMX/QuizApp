@@ -44,22 +44,25 @@ public abstract class ApiController : ControllerBase
             where TRequest : IRequest<Result<TResponse>>
     {
         var validator = this.serviceProvider
-            .GetRequiredService<AbstractValidator<TRequest>>();
+            .GetService<IValidator<TRequest>>();
 
-        var validationResultResult = await validator?
-            .ValidateAsync(request, cancellationToken);
-
-        if(validationResultResult?.IsValid is false)
+        if (validator is not null)
         {
-            StringBuilder validateErrors = new StringBuilder();
-            foreach (var item in validationResultResult.Errors)
+            var validationResultResult = await validator
+                .ValidateAsync(request, cancellationToken);
+
+            if (validationResultResult?.IsValid is false)
             {
-                validateErrors.AppendLine(item.ErrorMessage);
+                StringBuilder validateErrors = new StringBuilder();
+                foreach (var item in validationResultResult.Errors)
+                {
+                    validateErrors.AppendLine(item.ErrorMessage);
+                }
+
+                var errors = new Error("Validation error", validateErrors.ToString());
+
+                return Result.Failure<TResponse>(errors);
             }
-
-            var errors = new Error("Validation error", validateErrors.ToString());
-
-            return Result.Failure<TResponse>(errors);
         }
 
         return await this.sender
