@@ -8,8 +8,8 @@ namespace QuizApp.Api.Controllers;
 [Route("api/tags")]
 public class TagsController : ApiController
 {
-    public TagsController(ISender sender)
-        : base(sender)
+    public TagsController(ISender sender,IServiceProvider provider)
+        : base(sender, provider)
     {
     }
     [HttpGet("id:guid")]
@@ -19,7 +19,8 @@ public class TagsController : ApiController
     {
         var query = new GetTagByIdQuery(id);
 
-        Result<TagResponse> response = await Sender.Send(query, cancellationToken);
+        Result<TagResponse> response = await HandleAsync<TagResponse,
+            GetTagByIdQuery>(query, cancellationToken);
 
         if (response.IsFailure)
         {
