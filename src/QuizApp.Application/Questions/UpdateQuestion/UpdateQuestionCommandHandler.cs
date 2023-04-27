@@ -47,12 +47,12 @@ public class UpdateQuestionCommandHandler
         }
         else
         {
-            var errors = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
             foreach (var item in result.Errors)
-                errors.AppendLine(errors.ToString());
+                sb.AppendLine(sb.ToString());
 
-            var error = new Error("Validation.Error", errors.ToString());
+            var error = new Error("Validation.Error", sb.ToString());
 
             return
                 Result.Failure<UpdateQuestionResponse>(error);
