@@ -37,7 +37,7 @@ public class CreateQuestionCommandHandler
             questionRepository.Insert(question);
 
             CreateQuestionResponse questionResponse =
-                new CreateQuestionResponse(question.Id);
+                new CreateQuestionResponse(question.Id, question.Content);
 
             await this.unitOfWork.SaveChangesAsync(cancellationToken);
 
