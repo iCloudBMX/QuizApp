@@ -6,22 +6,20 @@ public class UpdateQuestionValidator : AbstractValidator<UpdateQuestionCommand>
 {
     public UpdateQuestionValidator()
     {
-        RuleFor(uq => uq.Id)
+        RuleFor(uq => uq.id)
             .NotEmpty()
             .NotEqual(default(Guid));
 
-        RuleFor(uq => uq.Content)
-            .NotEmpty()
-            .WithMessage("Content must be provded");
-
         RuleFor(uq => uq.Type)
-            .NotEmpty()
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Type must be provded");
+            .NotEmpty().WithMessage("Type is required!")
+            .GreaterThanOrEqualTo(0);
 
         RuleFor(uq => uq.Level)
+            .NotEmpty().WithMessage("Level is required!")
+            .GreaterThanOrEqualTo(0);
+
+        RuleFor(uq => uq.Content)
             .NotEmpty()
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Level must be provded");
+            .WithMessage("Content is required!");
     }
 }
