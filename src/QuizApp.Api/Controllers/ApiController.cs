@@ -51,7 +51,7 @@ public abstract class ApiController : ControllerBase
             var validationResultResult = await validator
                 .ValidateAsync(request, cancellationToken);
 
-            if (validationResultResult?.IsValid is false)
+            if (validationResultResult.IsValid is false)
             {
                 StringBuilder validateErrors = new StringBuilder();
                 foreach (var item in validationResultResult.Errors)
