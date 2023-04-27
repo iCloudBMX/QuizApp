@@ -33,10 +33,6 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
         RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
-        var valideResult = validator.Validate(request);
-
-        if (valideResult.IsValid)
-        {
             string passwordHash = request.Password;
 
             var newUser = new User(
@@ -63,18 +59,5 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
             await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
 
             return newUser.Id;
-        }
-        else
-        {
-            StringBuilder validateErrors = new StringBuilder();
-            foreach (var item in valideResult.Errors)
-            {
-                validateErrors.AppendLine(item.ErrorMessage);
-            }
-
-            var errors = new Error("Validation error", validateErrors.ToString());
-
-            return Result.Failure<Guid>(errors);
-        }
     }
 }

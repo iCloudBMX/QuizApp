@@ -2,14 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Questions.CreateQuestion;
 using QuizApp.Application.Questions.GetQuestionById;
+using QuizApp.Application.Questions.UpdateQuestion;
 using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers;
 [Route("api/[controller]")]
 public class QuestionController : ApiController
 {
-    public QuestionController(ISender sender)
-        : base(sender)
+    public QuestionController(ISender sender,IServiceProvider provider)
+        : base(sender, provider)
     { }
 
     [HttpPost]
@@ -18,12 +19,26 @@ public class QuestionController : ApiController
         CancellationToken cancellationToken)
     {
         Result<CreateQuestionResponse> response =
-            await Sender.Send(request, cancellationToken);
+            await HandleAsync<CreateQuestionResponse,
+            CreateQuestionCommand>(request, cancellationToken);
+
+        if(response.IsFailure)
+            return HandleFailure(response);
+
+        return Ok(response);
+    }
+
+    [HttpPut]
+    public async ValueTask<IActionResult> PutQuestion(
+        UpdateQuestionCommand request,
+        CancellationToken cancellationToken)
+    {
+        var response = await HandleAsync<UpdateQuestionResponse,
+            UpdateQuestionCommand>(request, cancellationToken);
 
         if (response.IsFailure)
-        {
             return HandleFailure(response);
-        }
+
         return Ok(response);
     }
 
@@ -34,12 +49,11 @@ public class QuestionController : ApiController
     {
         var query = new GetQuestionByIdQuery(id);
 
-        Result<GetQuestionByIdResponse> response = await Sender.Send(query, cancellationToken);
+        var response = await HandleAsync<GetQuestionByIdResponse,
+            GetQuestionByIdQuery>(query, cancellationToken);
 
         if (response.IsFailure)
-        {
             return HandleFailure(response);
-        }
 
         return Ok(response);
     }

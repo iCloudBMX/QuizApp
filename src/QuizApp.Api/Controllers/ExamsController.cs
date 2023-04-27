@@ -9,8 +9,8 @@ namespace QuizApp.Api.Controllers;
 [Route("api/exam")]
 public class ExamsController : ApiController
 {
-    public ExamsController(ISender sender)
-        : base(sender)
+    public ExamsController(ISender sender,IServiceProvider provider)
+        : base(sender,provider)
     {
     }
 
@@ -19,7 +19,8 @@ public class ExamsController : ApiController
         CreateExamCommand exam,
         CancellationToken cancellationToken)
     {
-        var response = await Sender.Send(exam, cancellationToken);
+        var response = await HandleAsync<CreateExamResponse,
+            CreateExamCommand>(exam, cancellationToken);
 
         if (response.IsFailure)
         {
@@ -37,7 +38,8 @@ public class ExamsController : ApiController
         var query = new GetExamByIdQuery(examId);
 
         Result<GetExamByIdResponse> response =
-            await Sender.Send(query, cancellationToken);
+            await HandleAsync<GetExamByIdResponse,
+            GetExamByIdQuery>(query, cancellationToken);
 
         if (response.IsFailure)
         {
