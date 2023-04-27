@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Questions.GetQuestionById;
 using QuizApp.Application.Tags.CreateTag;
+using QuizApp.Application.Tags.DeleteTag;
 using QuizApp.Application.Tags.GetQuestionsByTag;
 using QuizApp.Application.Tags.GetTagById;
 using QuizApp.Application.Tags.GetTagsByTesterId;
@@ -22,7 +23,8 @@ public class TagsController : ApiController
         CreateTagCommand tag,
         CancellationToken cancellationToken)
     {
-        var response = await Sender.Send(tag, cancellationToken);
+        var response = await HandleAsync<TagResponse,
+            CreateTagCommand>(tag, cancellationToken);
 
         if (response.IsFailure)
         {
@@ -31,7 +33,7 @@ public class TagsController : ApiController
 
         return Ok(response);
     }
-    /*
+
     [HttpGet("id:guid")]
     public async Task<IActionResult> GetTagById(
         Guid id,
@@ -49,7 +51,7 @@ public class TagsController : ApiController
 
         return Ok(response);
     }
-    */
+    
     [HttpGet("TesterId:guid")]
     public async Task<IActionResult> GetTagsByTesterId(
         Guid testerId,
@@ -57,7 +59,8 @@ public class TagsController : ApiController
     {
         var query = new GetTagsByTesterIdQuery(testerId);
 
-        Result<IList<TagResponse>> result = await Sender.Send(query, cancellation);
+       var result = await HandleAsync<IList<TagResponse>,
+           GetTagsByTesterIdQuery>(query,cancellation);
 
         if (result.IsFailure)
         {
@@ -74,13 +77,27 @@ public class TagsController : ApiController
     {
         var query = new GetQuestionsByTagQuery(tagId);
 
-        Result<IList<GetQuestionByIdResponse>> result = await Sender.Send(query, cancellation);
+        var result = await HandleAsync<IList<GetQuestionByIdResponse>,
+            GetQuestionsByTagQuery>(query, cancellation);
 
         if (result.IsFailure)
         {
             return HandleFailure(result);
         }
 
+        return Ok(result);
+    }
+
+    [HttpDelete("tagId:guid")]
+    public async Task<IActionResult> DeleteTag(Guid tagId,
+        CancellationToken cancellation)
+    {
+        var query = new DeleteTagCommand(tagId);
+        var result = HandleAsync<Guid, DeleteTagCommand>(query, cancellation);
+        if (result.IsFaulted)
+        {
+            return HandleFailure(result.Result);
+        }
         return Ok(result);
     }
 }

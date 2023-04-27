@@ -20,7 +20,10 @@ public class DeleteTagCommandHandler : ICommandHandler<DeleteTagCommand, Guid>
 
     public async Task<Result<Guid>> Handle(DeleteTagCommand request, CancellationToken cancellationToken)
     {
-        var tag = tagRepository.SelectAsync(cancellationToken, request.TagId);
-        throw new NotImplementedException();
+        var tag = await tagRepository.SelectAsync(cancellationToken, request.TagId);
+        tagRepository.Delete(tag);
+        await unitOfWork.SaveChangesAsync();
+
+        return request.TagId;
     }
 }
