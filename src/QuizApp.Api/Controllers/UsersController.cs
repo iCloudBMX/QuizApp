@@ -8,8 +8,9 @@ namespace QuizApp.Api.Controllers;
 [Route("api/users")]
 public class UsersController : ApiController
 {
-    public UsersController(ISender sender)
-        : base(sender)
+    public UsersController(
+        ISender sender,
+        IServiceProvider serviceProvider) : base(sender, serviceProvider)
     {
     }
 
@@ -20,7 +21,8 @@ public class UsersController : ApiController
     {
         var query = new GetUserByIdQuery(id);
 
-        Result<UserResponse> response = await Sender.Send(query, cancellationToken);
+        var response = await HandleAsync<UserResponse, GetUserByIdQuery>(
+            query, cancellationToken);
 
         if (response.IsFailure)
         {

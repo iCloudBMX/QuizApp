@@ -2,6 +2,8 @@
 using QuizApp.Application.Exams.CreateExam;
 using QuizApp.Application.Tags.CreateTag;
 using QuizApp.Application.Tags.GetTagById;
+using QuizApp.Application.Questions.CreateQuestion;
+using QuizApp.Application.Questions.UpdateQuestion;
 using QuizApp.Domain.Entities;
 
 namespace QuizApp.Application.AutoMapper;
@@ -13,5 +15,7 @@ public class MappingProfile : Profile
 		CreateMap<CreateExamCommand, Exam>();
 		CreateMap<CreateTagCommand,Tag>();
 		CreateMap<TagResponse, Tag>();
+		CreateMap<CreateQuestionCommand, Question>();
+		CreateMap<UpdateQuestionCommand, Question>();
 	}
 }

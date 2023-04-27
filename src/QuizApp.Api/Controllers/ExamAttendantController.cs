@@ -1,15 +1,16 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.ExamAttendants;
+using QuizApp.Application.ExamAttendants.GetExamAttendantByToken;
 using QuizApp.Application.ExamAttendants.GetExamAttendantsByExam;
-using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers;
 
 [Route("api/examAttendant")]
 public class ExamAttendantController : ApiController
 {
-    public ExamAttendantController(ISender sender) : base(sender)
+    public ExamAttendantController(ISender sender,
+        IServiceProvider provider) : base(sender, provider)
     {
     }
 
@@ -18,26 +19,41 @@ public class ExamAttendantController : ApiController
         CreateExamAttendantCommand command,
         CancellationToken token)
     {
-        Result<ExamAttendantResponse> response = await Sender.Send(command, token);
+        var response = await HandleAsync<ExamAttendantResponse,
+            CreateExamAttendantCommand>(command, token);
 
-        if(response.IsFailure)
+        if (response.IsFailure)
         {
             return HandleFailure(response);
         }
         return Ok(response);
     }
-    [HttpGet("examId:Guid")]
-    public async ValueTask<IActionResult> GetExamApplicantByExamId(
-        Guid examId,
+    //[HttpGet("examId:Guid")]
+    //public async ValueTask<IActionResult> GetExamAttendantByExamId(
+    //    Guid examId,
+    //    CancellationToken token)
+    //{
+    //    var query = new GetExamAttendantByExamQuery(examId);
+    //    var response = await HandleAsync<ExamAttendantResponse,
+    //        GetExamAttendantByExamQuery>(query, token);
+
+    //    if (response.IsFailure)
+    //    {
+    //        return HandleFailure(response);
+    //    }
+
+    //    return Ok(response);
+    //}
+
+    [HttpGet("token:string")]
+    public async ValueTask<IActionResult> GetExamAttendantByToken(
+        GetExamAttendantByTokenQuery query,
         CancellationToken token)
     {
-        var query = new GetExamAttendantByExamQuery(examId);
-        var response = await Sender.Send(query, token);
-
-        if(response.IsFailure)
-        {
+        var response = await HandleAsync<ExamAttendantResponse,
+            GetExamAttendantByTokenQuery>(query, token);
+        if (response.IsFailure)
             return HandleFailure(response);
-        }
 
         return Ok(response);
     }
