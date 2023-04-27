@@ -9,6 +9,9 @@ using QuizApp.Application.Exams.Validations;
 using QuizApp.Application.OtpCodes.Validations;
 using QuizApp.Application.Questions.CreateQuestion;
 using QuizApp.Application.Questions.Validations;
+using QuizApp.Application.Tags.CreateTag;
+using QuizApp.Application.Tags.GetQuestionsByTag;
+using QuizApp.Application.Tags.Validations;
 using QuizApp.Application.Users.Register;
 using QuizApp.Application.Users.Validations;
 
@@ -32,6 +35,9 @@ public static class Dependencies
         services.AddScoped<IValidator<RegisterUserCommand>, RegisterUserValidator>();
 
         services.AddScoped<IValidator<VerifyOtpCodeCommand>, VerifyOtpCodeValidator>();
+
+        services.AddScoped<IValidator<CreateTagCommand>, CreateTagValidator>();
+
 
         return services;
     }
