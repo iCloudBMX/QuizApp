@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using QuizApp.Domain.Entities;
+using QuizApp.Infrastructure.Persistence.Constants;
 
 namespace QuizApp.Infrastructure.Persistence.Configurations;
 public class TagConfiguration : IEntityTypeConfiguration<Tag>
@@ -9,7 +10,7 @@ public class TagConfiguration : IEntityTypeConfiguration<Tag>
     public void Configure(EntityTypeBuilder<Tag> builder)
     {
         builder
-            .ToTable("Tags");
+            .ToTable(TableNames.Tags);
 
         builder
             .HasKey(t => t.Id);

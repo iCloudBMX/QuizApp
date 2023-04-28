@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application;
+using QuizApp.Application.Abstractions;
 using QuizApp.Application.Users.Register;
 using QuizApp.Domain.Shared;
 
@@ -9,7 +10,9 @@ namespace QuizApp.Api.Controllers;
 [Route("api/auth")]
 public class AuthController : ApiController
 {
-    public AuthController(ISender sender) : base(sender)
+    public AuthController(
+        ISender sender,
+        IServiceProvider serviceProvider) : base(sender, serviceProvider)
     {
     }
 
@@ -18,8 +21,8 @@ public class AuthController : ApiController
         [FromBody] RegisterUserCommand registerUserCommand,
         CancellationToken cancellationToken)
     {
-        Result<Guid> result = await Sender
-            .Send(registerUserCommand, cancellationToken);
+        var result = await HandleAsync<Guid, RegisterUserCommand>(
+            registerUserCommand, cancellationToken);
 
         if(result.IsFailure)
         {
@@ -34,8 +37,8 @@ public class AuthController : ApiController
         [FromBody] VerifyOtpCodeCommand verifyOtpCodeCommand,
         CancellationToken cancellationToken)
     {
-        Result<Guid> result = await Sender
-            .Send(verifyOtpCodeCommand, cancellationToken);
+        Result<Guid> result = await HandleAsync<Guid, VerifyOtpCodeCommand>(
+            verifyOtpCodeCommand, cancellationToken);
 
         if (result.IsFailure)
         {

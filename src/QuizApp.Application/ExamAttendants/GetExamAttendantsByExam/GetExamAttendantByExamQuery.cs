@@ -2,5 +2,6 @@
 
 namespace QuizApp.Application.ExamAttendants.GetExamAttendantsByExam;
 
-public record GetExamAttendantByExamQuery(Guid ExamId):IQuery<IQueryable<ExamAttendantResponse>>;
+public record GetExamAttendantByExamQuery(Guid ExamId)
+    : IQuery<IQueryable<ExamAttendantResponse>>;
 

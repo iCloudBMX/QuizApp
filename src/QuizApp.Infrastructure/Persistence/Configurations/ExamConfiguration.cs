@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using QuizApp.Domain.Entities;
+using QuizApp.Infrastructure.Persistence.Constants;
 
 namespace QuizApp.Infrastructure.Persistence.Configurations
 {
@@ -8,7 +9,7 @@ namespace QuizApp.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Exam> builder)
         {
-            builder.ToTable("Exams");
+            builder.ToTable(TableNames.Exams);
 
             builder.HasKey(x => x.Id);
 
