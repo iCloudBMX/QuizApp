@@ -14,14 +14,12 @@ public static class Dependencies
         services.AddMediatR(typeof(Dependencies).Assembly);
 
         services.AddAutoMapper(typeof(MappingProfile));
-        var assembly = Assembly.GetExecutingAssembly();
-        var abstractValidatorType = typeof(AbstractValidator<>);
-        var validatorTypes = assembly.GetExportedTypes();
 
         Assembly.GetExecutingAssembly()
             .GetTypes()
             .Where(item => item.GetInterfaces()
-            .Where(i => i.IsGenericType).Any(i => i.GetGenericTypeDefinition() == typeof(IValidator<>)) && !item.IsAbstract && !item.IsInterface)
+            .Where(i => i.IsGenericType).
+            Any(i => i.GetGenericTypeDefinition() == typeof(IValidator<>)) && !item.IsAbstract && !item.IsInterface)
             .ToList()
             .ForEach(assignedTypes =>
             {

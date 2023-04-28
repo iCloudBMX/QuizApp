@@ -29,7 +29,7 @@ public class AuthController : ApiController
             return HandleFailure(result); 
         }
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     [HttpPost("verify")]
@@ -45,6 +45,6 @@ public class AuthController : ApiController
             return HandleFailure(result);
         }
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 }
