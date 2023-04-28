@@ -28,30 +28,32 @@ public class ExamAttendantController : ApiController
         }
         return Ok(response);
     }
-    //[HttpGet("examId:Guid")]
-    //public async ValueTask<IActionResult> GetExamAttendantByExamId(
-    //    Guid examId,
-    //    CancellationToken token)
-    //{
-    //    var query = new GetExamAttendantByExamQuery(examId);
-    //    var response = await HandleAsync<ExamAttendantResponse,
-    //        GetExamAttendantByExamQuery>(query, token);
+    [HttpGet("examId:Guid")]
+    public async ValueTask<IActionResult> GetExamAttendantByExamId(
+        Guid examId,
+        CancellationToken token)
+    {
+        var query = new GetExamAttendantByExamQuery(examId);
+        var response = await HandleAsync<
+            IQueryable<ExamAttendantResponse>,
+            GetExamAttendantByExamQuery>(query, token);
 
-    //    if (response.IsFailure)
-    //    {
-    //        return HandleFailure(response);
-    //    }
+        if (response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
 
-    //    return Ok(response);
-    //}
+        return Ok(response);
+    }
 
     [HttpGet("token:string")]
     public async ValueTask<IActionResult> GetExamAttendantByToken(
-        GetExamAttendantByTokenQuery query,
-        CancellationToken token)
+        string token,
+        CancellationToken cancellationToken)
     {
+        var query=new GetExamAttendantByTokenQuery(token);
         var response = await HandleAsync<ExamAttendantResponse,
-            GetExamAttendantByTokenQuery>(query, token);
+            GetExamAttendantByTokenQuery>(query, cancellationToken);
         if (response.IsFailure)
             return HandleFailure(response);
 

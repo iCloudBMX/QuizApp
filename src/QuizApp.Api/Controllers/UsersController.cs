@@ -29,6 +29,6 @@ public class UsersController : ApiController
             return HandleFailure(response);
         }
 
-        return Ok(response);
+        return Ok(response.Value);
     }
 }
