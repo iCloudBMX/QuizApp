@@ -48,11 +48,12 @@ public class ExamAttendantController : ApiController
 
     [HttpGet("token:string")]
     public async ValueTask<IActionResult> GetExamAttendantByToken(
-        GetExamAttendantByTokenQuery query,
-        CancellationToken token)
+        string token,
+        CancellationToken cancellationToken)
     {
+        var query=new GetExamAttendantByTokenQuery(token);
         var response = await HandleAsync<ExamAttendantResponse,
-            GetExamAttendantByTokenQuery>(query, token);
+            GetExamAttendantByTokenQuery>(query, cancellationToken);
         if (response.IsFailure)
             return HandleFailure(response);
 

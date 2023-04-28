@@ -49,7 +49,7 @@ public class CreateExamAttendantCommandHendler : ICommandHandler<CreateExamAtten
 
         await unitOfWork.SaveChangesAsync();
 
-        var response = mapper.Map<ExamAttendantResponse>(attendant);
+        var response = ExamAttendantMapper.MapToExamAttendantResponse(attendant);
 
         return response;
     }

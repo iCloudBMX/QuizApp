@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using QuizApp.Application.Abstractions;
 using QuizApp.Domain.Repositories;
 using QuizApp.Domain.Shared;
@@ -21,9 +22,10 @@ public class GetExamAttendantByExamQueryHandler :
 
         examAttendants = examAttendants.Where(e => e.ExamId == request.ExamId);
         var response =
-            (Result<IQueryable<ExamAttendantResponse>>)examAttendants
+            examAttendants
             .Select(e=>ExamAttendantMapper.MapToExamAttendantResponse(e));
-        return response;
+        var result=Result.Success(response);
+        return result;
     }
 }
 
