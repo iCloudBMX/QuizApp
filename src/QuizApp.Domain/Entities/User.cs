@@ -10,6 +10,7 @@ public class User
     public string Phone { get; private set; }
     public string Email { get; private set; }
     public UserRole Role { get; private set; }
+    public string Salt { get; set; }
     public string PasswordHash { get; private set; }
     public DateTime RegisteredAt { get; } = DateTime.Now;
     public DateTime? LastLogin { get; private set; }
@@ -32,6 +33,7 @@ public class User
         string lastName,
         string phone,
         string email,
+        string salt,
         string passwordHash,
         UserRole role)
     {
