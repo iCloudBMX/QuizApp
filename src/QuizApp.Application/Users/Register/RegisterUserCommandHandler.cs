@@ -1,12 +1,10 @@
-﻿using FluentValidation;
-using QuizApp.Application.Abstractions;
+﻿using QuizApp.Application.Abstractions;
 using QuizApp.Application.Helpers;
 using QuizApp.Domain.Entities;
 using QuizApp.Domain.Enums;
 using QuizApp.Domain.Interfaces;
 using QuizApp.Domain.Repositories;
 using QuizApp.Domain.Shared;
-using System.Text;
 
 namespace QuizApp.Application.Users.Register;
 
@@ -15,49 +13,54 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
     private readonly IUserRepository userRepository;
     private readonly IUnitOfWork unitOfWork;
     private readonly IEmailService emailService;
-    private readonly IValidator<RegisterUserCommand> validator;
+    private readonly IPasswordHasher hasher;
+
+
 
     public RegisterUserCommandHandler(
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
         IEmailService emailService,
-        IValidator<RegisterUserCommand> validator)
+        IPasswordHasher hasher)
     {
         this.userRepository = userRepository;
         this.unitOfWork = unitOfWork;
         this.emailService = emailService;
-        this.validator = validator;
+        this.hasher = hasher;
     }
 
     public async Task<Result<Guid>> Handle(
         RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
-            string passwordHash = request.Password;
+        string randomSalt = Guid.NewGuid().ToString();
 
-            var newUser = new User(
-                request.FirstName,
-                request.LastName,
-                request.PhoneNumber,
-                request.Email,
-                passwordHash,
-                UserRole.Tester);
+        string passwordHash = hasher.CreatePasswordHash(request.Password, randomSalt);
 
-            this.userRepository.Insert(newUser);
+        var newUser = new User(
+            request.FirstName,
+            request.LastName,
+            request.PhoneNumber,
+            request.Email,
+            randomSalt,
+            passwordHash,
+            UserRole.Tester);
 
-            var newOtpCode = new OtpCode(
-                OtpCodeHelper.GenerateOtpCode());
+        this.userRepository.Insert(newUser);
 
-            newUser.OtpCodes.Add(newOtpCode);
-            await this.unitOfWork.SaveChangesAsync(cancellationToken);
+        var newOtpCode = new OtpCode(
+            OtpCodeHelper.GenerateOtpCode());
 
-            var mailRequest = new MailRequest(
-                request.Email,
-                "New User Registration",
-                $"Your verification code is {newOtpCode.Code}");
+        newUser.OtpCodes.Add(newOtpCode);
+        await this.unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
+        var mailRequest = new MailRequest(
+            request.Email,
+            "New User Registration",
+            $"Your verification code is {newOtpCode.Code}");
 
-            return newUser.Id;
+        await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
+
+        return newUser.Id;
     }
 }

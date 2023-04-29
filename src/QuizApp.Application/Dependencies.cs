@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using QuizApp.Application.AutoMapper;
+using QuizApp.Application.Helpers;
 using System.Reflection;
 
 namespace QuizApp.Application;
@@ -14,6 +15,7 @@ public static class Dependencies
         services.AddMediatR(typeof(Dependencies).Assembly);
 
         services.AddAutoMapper(typeof(MappingProfile));
+        services.AddScoped<IPasswordHasher,PasswordHasher>();
 
         Assembly.GetExecutingAssembly()
             .GetTypes()
