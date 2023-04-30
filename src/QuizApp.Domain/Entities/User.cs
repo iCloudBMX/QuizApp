@@ -41,6 +41,7 @@ public class User
         LastName = lastName;
         Phone = phone;
         Email = email;
+        Salt=salt;
         PasswordHash = passwordHash;
         Role = role;
         Status = UserStatus.New;
