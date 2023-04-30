@@ -57,7 +57,18 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
         var mailRequest = new MailRequest(
             request.Email,
             "New User Registration",
-            $"Your verification code is {newOtpCode.Code}");
+            $"<!DOCTYPE html>" +
+            $"<html>" +
+            $"<head>" +
+            $"<meta charset=\"utf-8\">" +
+            $"<title>OTP Verification Code</title>" +
+            $"</head>" +
+            $"<body><h1>OTP Verification Code</h1>" +
+            $"<p>Dear {newUser.FirstName},</p>" +
+            $"<p>Your OTP verification code is:</p>" +
+            $"<h2 style=\"font-size: 3em; color: red;\">{newOtpCode}</h2>" +
+            $"<p>Please enter this code to complete your verification process.</p>" +
+            $"<img src=\"QuizAppLogo.png\" alt=\"Verification Image\" style=\"max-width: 100%;\">\r\n  </body>\r\n</html>\r\n");
 
         await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
 
