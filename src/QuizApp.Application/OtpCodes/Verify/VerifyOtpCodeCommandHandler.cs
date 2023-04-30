@@ -14,28 +14,21 @@ internal class VerifyOtpCodeCommandHandler : ICommandHandler<VerifyOtpCodeComman
     private readonly IUserRepository userRepository;
     private readonly IUnitOfWork unitOfWork;
     private readonly IOtpCodeRepository otpCodeRepository;
-    private readonly IValidator<VerifyOtpCodeCommand> validator;
 
     public VerifyOtpCodeCommandHandler(
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        IOtpCodeRepository otpCodeRepository,
-        IValidator<VerifyOtpCodeCommand> validator)
+        IOtpCodeRepository otpCodeRepository)
     {
         this.userRepository = userRepository;
         this.unitOfWork = unitOfWork;
         this.otpCodeRepository = otpCodeRepository;
-        this.validator = validator;
     }
 
     public async Task<Result<Guid>> Handle(
         VerifyOtpCodeCommand request,
         CancellationToken cancellationToken)
     {
-        var validateResult=validator.Validate(request);
-        if(validateResult.IsValid)
-        {
-
         User maybeUser = await this.userRepository
             .SelectUserWithOtpCodesAsync(request.UserId);
 
@@ -80,17 +73,6 @@ internal class VerifyOtpCodeCommandHandler : ICommandHandler<VerifyOtpCodeComman
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
 
         return maybeUser.Id;
-        }
-        else
-        {
-            StringBuilder validateErrors = new StringBuilder();
-            foreach (var item in validateResult.Errors)
-            {
-                validateErrors.AppendLine(item.ErrorMessage);
-            }
-            var errors = new Error("Validation error", validateErrors.ToString());
-
-            return Result.Failure<Guid>(errors);
-        }
+        
     }
 }

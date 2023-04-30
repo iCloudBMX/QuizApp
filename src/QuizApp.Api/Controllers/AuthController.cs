@@ -24,9 +24,9 @@ public class AuthController : ApiController
         var result = await HandleAsync<Guid, RegisterUserCommand>(
             registerUserCommand, cancellationToken);
 
-        if(result.IsFailure)
+        if (result.IsFailure)
         {
-            return HandleFailure(result); 
+            return HandleFailure(result);
         }
 
         return Ok(result.Value);
@@ -47,4 +47,23 @@ public class AuthController : ApiController
 
         return Ok(result.Value);
     }
+
+    [HttpPost("resendEmail/{userId:guid}")]
+    public async Task<IActionResult> ResendEmailByUserId(
+        Guid userId,
+        CancellationToken cancellationToken)
+    {
+        var query = new ResendEmailCommand(userId);
+        var response = await HandleAsync<Guid, ResendEmailCommand>(
+            query, cancellationToken);
+
+        if (response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+
+        return Ok(response.Value);
+    }
+        
+    
 }
