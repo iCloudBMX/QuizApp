@@ -24,6 +24,10 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired(true)
             .HasMaxLength(50);
 
+        builder.Property(u => u.Salt)
+            .IsRequired(true)
+            .HasMaxLength(50);
+
         builder.Property(u => u.PasswordHash)
             .IsRequired(true)
             .HasMaxLength(50);

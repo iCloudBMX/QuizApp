@@ -12,7 +12,7 @@ using QuizApp.Infrastructure.Persistence;
 namespace QuizApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230429101101_Initial")]
+    [Migration("20230430063706_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -289,6 +289,11 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
