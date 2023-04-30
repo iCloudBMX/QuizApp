@@ -43,4 +43,9 @@ public class Repository<T> : IRepository<T> where T : class
         this.applicationDbContext
         .Set<T>()
         .Remove(entity);
+
+    public void ExacuteSqlQuery(string sqlQury)
+    {
+        applicationDbContext.Database.ExecuteSqlRaw(sqlQury);
+    }
 }
