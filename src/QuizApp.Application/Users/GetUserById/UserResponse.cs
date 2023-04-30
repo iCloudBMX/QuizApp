@@ -2,7 +2,7 @@
 
 public record UserResponse(
     Guid Id,
-    string Name,
+    string Firstname,
     string LastName,
     string Phone,
     string Email,
