@@ -6,7 +6,7 @@ using QuizApp.Domain.Shared;
 
 namespace QuizApp.Application.Users.GetAllUsers
 {
-    public class GetAllUsersQueryHandler : IQueryHandler<GetAllUsersQuery, IList<UserResponse>>
+    public class GetAllUsersQueryHandler : IQueryHandler<GetAllUsersQuery, GetAllUsersResponse>
     {
         private readonly IUserRepository userRepository;
         private readonly IMapper mapper;
@@ -19,19 +19,19 @@ namespace QuizApp.Application.Users.GetAllUsers
             this.mapper = mapper;
         }
 
-        public Task<Result<IList<UserResponse>>> Handle(
+        public async Task<Result<GetAllUsersResponse>> Handle(
             GetAllUsersQuery request,
             CancellationToken cancellationToken)
         {
-            var users = userRepository.SelectAllAsync(cancellationToken);
-            IList<UserResponse> allUserResponse = new List<UserResponse>();
-            foreach (var item in users.Result)
+            var users =await userRepository.SelectAllAsync(cancellationToken);
+           var allUserResponse = new GetAllUsersResponse(new List<UserResponse>());
+            foreach (var item in users)
             {
-                allUserResponse.Add(
+                allUserResponse.allUsers.Add(
                     mapper.Map<UserResponse>(item));
             }
 
-            return (Task<Result<IList<UserResponse>>>)allUserResponse;
+            return allUserResponse;
         }
     }
 }

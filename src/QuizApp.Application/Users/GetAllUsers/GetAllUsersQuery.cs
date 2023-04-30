@@ -3,6 +3,6 @@ using QuizApp.Application.Users.GetUserById;
 
 namespace QuizApp.Application.Users.GetAllUsers
 {
-    public class GetAllUsersQuery : IQuery<IList<UserResponse>>
+    public class GetAllUsersQuery : IQuery<GetAllUsersResponse>
     { }
 }

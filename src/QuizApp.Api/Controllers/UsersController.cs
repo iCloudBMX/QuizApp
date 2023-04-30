@@ -39,8 +39,10 @@ public class UsersController : ApiController
     {
         var query = new GetAllUsersQuery();
 
-        var response = await HandleAsync<IList<UserResponse>, GetAllUsersQuery>(
+        var response = await HandleAsync
+            <GetAllUsersResponse, GetAllUsersQuery>(
             query, cancellationToken);
+
         if (response.IsFailure)
         {
             return HandleFailure(response);
