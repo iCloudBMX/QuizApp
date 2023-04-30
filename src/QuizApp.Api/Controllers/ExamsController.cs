@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using QuizApp.Application.Exams.AddQuestionsByExamId;
 using QuizApp.Application.Exams.CreateExam;
 using QuizApp.Application.Exams.GetExamById;
+using QuizApp.Domain.Entities;
 using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers;
@@ -27,8 +29,28 @@ public class ExamsController : ApiController
             return HandleFailure(response);
         }
 
-        return Ok(response);
+        return Ok(response.Value);
     }
+
+    [HttpPost("/{examId:guid}")]
+    public async Task<IActionResult>AddQuestionsByExamId(
+        Guid examId,
+        IList<Guid>questionsIds,
+        CancellationToken cancellationToken)
+    {
+        var query=new AddQuestionsByExamIdCommand(examId, questionsIds);
+
+        var response=await HandleAsync<Guid,
+            AddQuestionsByExamIdCommand>(query, cancellationToken);
+
+        if (response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+
+        return Ok(response.Value);
+    }
+
 
     [HttpGet("{examId:guid}")]
     public async Task<IActionResult> GetExamById(
@@ -46,7 +68,7 @@ public class ExamsController : ApiController
             return HandleFailure(response);
         }
 
-        return Ok(response);
+        return Ok(response.Value);
 
     }
 }
