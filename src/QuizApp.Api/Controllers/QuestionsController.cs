@@ -1,15 +1,16 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Questions.CreateQuestion;
+using QuizApp.Application.Questions.GetAllQuestions;
 using QuizApp.Application.Questions.GetQuestionById;
 using QuizApp.Application.Questions.UpdateQuestion;
 using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers;
 [Route("api/[controller]")]
-public class QuestionController : ApiController
+public class QuestionsController : ApiController
 {
-    public QuestionController(ISender sender,IServiceProvider provider)
+    public QuestionsController(ISender sender,IServiceProvider provider)
         : base(sender, provider)
     { }
 
@@ -25,7 +26,7 @@ public class QuestionController : ApiController
         if(response.IsFailure)
             return HandleFailure(response);
 
-        return Ok(response);
+        return Ok(response.Value);
     }
 
     [HttpPut]
@@ -39,7 +40,7 @@ public class QuestionController : ApiController
         if (response.IsFailure)
             return HandleFailure(response);
 
-        return Ok(response);
+        return Ok(response.Value);
     }
 
     [HttpGet("{id:guid}")]
@@ -55,6 +56,22 @@ public class QuestionController : ApiController
         if (response.IsFailure)
             return HandleFailure(response);
 
-        return Ok(response);
+        return Ok(response.Value);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllQuestions(CancellationToken cancellationToken)
+    {
+        var query = new GetAllQuestionsQuery();
+
+        var response = await HandleAsync<GetAllQuestionsResponse, GetAllQuestionsQuery>
+            (query, cancellationToken);
+
+        if(response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+
+        return Ok(response.Value);
     }
 }

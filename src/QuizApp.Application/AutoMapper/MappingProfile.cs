@@ -6,6 +6,8 @@ using QuizApp.Application.Questions.CreateQuestion;
 using QuizApp.Application.Questions.UpdateQuestion;
 using QuizApp.Domain.Entities;
 using QuizApp.Application.Users.GetUserById;
+using QuizApp.Application.Questions.GetAllQuestions;
+using QuizApp.Application.Questions.GetQuestionById;
 
 namespace QuizApp.Application.AutoMapper;
 
@@ -18,6 +20,7 @@ public class MappingProfile : Profile
 		CreateMap<TagResponse, Tag>();
 		CreateMap<CreateQuestionCommand, Question>();
 		CreateMap<UpdateQuestionCommand, Question>();
+		CreateMap<Question, GetQuestionByIdResponse>();
 		CreateMap<User, UserResponse>();
 	}
 }
