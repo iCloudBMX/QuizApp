@@ -13,6 +13,7 @@ public class CreateExamAttendantCommandHendler : ICommandHandler<CreateExamAtten
     private readonly IExamAttendantRepository repository;
     private readonly IValidator<CreateExamAttendantCommand> validator;
     private readonly IUnitOfWork unitOfWork;
+
     public CreateExamAttendantCommandHendler(
         IExamAttendantRepository repository,
         IValidator<CreateExamAttendantCommand> validator,

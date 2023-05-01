@@ -9,11 +9,13 @@ public class DeleteExamAttendantByIdCommandHandler :
     ICommandHandler<DeleteExamAttendantByIdCommand, ExamAttendantResponse>
 {
     private readonly IExamAttendantRepository repository;
+    private readonly IUnitOfWork unitOfWork;
 
     public DeleteExamAttendantByIdCommandHandler(
-        IExamAttendantRepository repository)
+        IExamAttendantRepository repository, IUnitOfWork unitOfWork)
     {
         this.repository = repository;
+        this.unitOfWork = unitOfWork;
     }
 
     public async Task<Result<ExamAttendantResponse>> Handle(
@@ -27,6 +29,8 @@ public class DeleteExamAttendantByIdCommandHandler :
                 DomainErrors.ExamAttendant.NotFound(request.id));
 
         repository.Delete(entity);
+
+        await unitOfWork.SaveChangesAsync();
 
         return ExamAttendantMapper.MapToExamAttendantResponse(entity);
     }
