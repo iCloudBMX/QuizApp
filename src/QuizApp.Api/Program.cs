@@ -11,7 +11,7 @@ public class Program
 
         builder.Services
             .AddInfrastructure(builder.Configuration)
-            .AddApplication()
+            .AddApplication(builder.Configuration)
             .AddApis();
 
         var app = builder.Build();
@@ -21,7 +21,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        
+
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();
