@@ -2,7 +2,7 @@
 
 public enum QuestionTypes
 {
-    TrueFalse,
+    TrueFalse=1,
     Selection,
     MultipleChoice
 }

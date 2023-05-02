@@ -38,11 +38,11 @@ namespace QuizApp.Infrastructure.Persistence.Configurations
                 .UsingEntity(
                     l => l.HasOne(typeof(Exam))
                     .WithMany()
-                    .HasForeignKey("ExamsId")
+                    .HasForeignKey("ExamId")
                     .OnDelete(DeleteBehavior.Cascade),
                     r => r.HasOne(typeof(Question))
                     .WithMany()
-                    .HasForeignKey("QuestionsId")
+                    .HasForeignKey("QuestionId")
                     .OnDelete(DeleteBehavior.NoAction));
         }
     }
