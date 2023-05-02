@@ -36,17 +36,21 @@ public static class Dependencies
         });
 
         services.Configure<MailSettings>(configuration.GetSection("MailSettings"));
-
         services.AddTransient<IEmailService, EmailService>();
 
+        RegisterRepositories(services);
+    }
+
+    private static void RegisterRepositories(IServiceCollection services)
+    {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<ITagRepository, TagRepository>();
-        services.AddTransient<IQuestionOptionRepository,QuestionOptionRepository>();
-        services.AddTransient<IExamRepository,ExamRepository>();
-        services.AddTransient<IQuestionRepository,QuestionRepository>();
-        services.AddTransient<IExamAttendantRepository,ExamAttendantRepository>();
+        services.AddTransient<IQuestionOptionRepository, QuestionOptionRepository>();
+        services.AddTransient<IExamRepository, ExamRepository>();
+        services.AddTransient<IQuestionRepository, QuestionRepository>();
+        services.AddTransient<IExamAttendantRepository, ExamAttendantRepository>();
         services.AddTransient<IOtpCodeRepository, OtpCodeRepository>();
     }
 }

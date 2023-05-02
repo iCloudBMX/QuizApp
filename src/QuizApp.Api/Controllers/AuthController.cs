@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application;
-using QuizApp.Application.Abstractions;
+using QuizApp.Application.Users.Login;
 using QuizApp.Application.Users.Register;
 using QuizApp.Domain.Shared;
 
@@ -48,12 +48,12 @@ public class AuthController : ApiController
         return Ok(result.Value);
     }
 
-    [HttpPost("resendEmail/{userId:guid}")]
+    [HttpPost("resendemail")]
     public async Task<IActionResult> ResendEmailByUserId(
-        Guid userId,
+       [FromBody] ResendEmailCommand userId,
         CancellationToken cancellationToken)
     {
-        var query = new ResendEmailCommand(userId);
+        var query = new ResendEmailCommand(userId.userId);
         var response = await HandleAsync<Guid, ResendEmailCommand>(
             query, cancellationToken);
 
@@ -64,6 +64,20 @@ public class AuthController : ApiController
 
         return Ok(response.Value);
     }
-        
-    
+
+    [HttpPost("login")]
+    public async Task<IActionResult>Login(
+       [FromBody] LoginQuery loginQuery,
+       CancellationToken cancellationToken)
+    {
+        var response =await HandleAsync<LoginQueryResponse, LoginQuery>(
+            loginQuery,cancellationToken);
+
+        if(response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+
+        return Ok(response.Value);
+    }
 }

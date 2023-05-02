@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QuizApp.Application.AutoMapper;
-using QuizApp.Application.Helpers;
+using QuizApp.Application.Helpers.Generatewt;
+using QuizApp.Application.Helpers.PasswordHashers;
 using System.Reflection;
 
 namespace QuizApp.Application;
@@ -10,12 +12,17 @@ namespace QuizApp.Application;
 public static class Dependencies
 {
     public static IServiceCollection AddApplication(
-        this IServiceCollection services)
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddMediatR(typeof(Dependencies).Assembly);
 
         services.AddAutoMapper(typeof(MappingProfile));
         services.AddScoped<IPasswordHasher,PasswordHasher>();
+
+
+        services.Configure<JwtOption>(configuration.GetSection("JwtSettings"));
+        services.AddTransient<IJwtTokenHandler, JwtTokenHandler>();
 
         Assembly.GetExecutingAssembly()
             .GetTypes()

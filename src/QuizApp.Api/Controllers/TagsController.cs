@@ -13,7 +13,7 @@ namespace QuizApp.Api.Controllers;
 [Route("api/tags")]
 public class TagsController : ApiController
 {
-    public TagsController(ISender sender,IServiceProvider provider)
+    public TagsController(ISender sender, IServiceProvider provider)
         : base(sender, provider)
     {
     }
@@ -51,7 +51,7 @@ public class TagsController : ApiController
 
         return Ok(response);
     }
-    
+
     [HttpGet("TesterId:guid")]
     public async Task<IActionResult> GetTagsByTesterId(
         Guid testerId,
@@ -59,8 +59,8 @@ public class TagsController : ApiController
     {
         var query = new GetTagsByTesterIdQuery(testerId);
 
-       var result = await HandleAsync<IList<TagResponse>,
-           GetTagsByTesterIdQuery>(query,cancellation);
+        var result = await HandleAsync<IList<TagResponse>,
+            GetTagsByTesterIdQuery>(query, cancellation);
 
         if (result.IsFailure)
         {
@@ -70,7 +70,7 @@ public class TagsController : ApiController
         return Ok(result);
     }
 
-    [HttpGet("/questions/TagId:guid")]
+    [HttpGet("/questions/tagId:guid")]
     public async Task<IActionResult> GetQuestionsByTagId(
         Guid tagId,
         CancellationToken cancellation)
@@ -93,11 +93,11 @@ public class TagsController : ApiController
         CancellationToken cancellation)
     {
         var query = new DeleteTagCommand(tagId);
-        var result = HandleAsync<Guid, DeleteTagCommand>(query, cancellation);
-        if (result.IsFaulted)
+        var result = await HandleAsync<Guid, DeleteTagCommand>(query, cancellation);
+        if (result.IsFailure)
         {
-            return HandleFailure(result.Result);
+            return HandleFailure(result);
         }
-        return Ok(result);
+        return Ok(result.Value);
     }
 }

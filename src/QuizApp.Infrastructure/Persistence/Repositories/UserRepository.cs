@@ -10,6 +10,13 @@ internal class UserRepository : Repository<User>, IUserRepository
         : base(applicationDbContext)
     { }
 
+    public async Task<User> SelectUserWithEmailAsync(string email)
+    {
+        return await this.applicationDbContext.
+                  Set<User>().Where(user => user.Email == email)
+                      .FirstOrDefaultAsync();
+    }
+
     public async Task<User> SelectUserWithOtpCodesAsync(Guid userId)
     {
         return await this.applicationDbContext
