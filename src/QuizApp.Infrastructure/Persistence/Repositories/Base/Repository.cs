@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizApp.Domain.Repositories;
+using System.Linq.Expressions;
 
 namespace QuizApp.Infrastructure.Persistence.Repositories;
 
