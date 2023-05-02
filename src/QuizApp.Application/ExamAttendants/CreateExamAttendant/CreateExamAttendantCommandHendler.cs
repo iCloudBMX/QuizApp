@@ -13,36 +13,21 @@ public class CreateExamAttendantCommandHendler : ICommandHandler<CreateExamAtten
     private readonly IExamAttendantRepository repository;
     private readonly IValidator<CreateExamAttendantCommand> validator;
     private readonly IUnitOfWork unitOfWork;
-    private readonly IMapper mapper;
 
     public CreateExamAttendantCommandHendler(
         IExamAttendantRepository repository,
         IValidator<CreateExamAttendantCommand> validator,
-        IUnitOfWork unitOfWork,
-        IMapper mapper)
+        IUnitOfWork unitOfWork)
     {
         this.repository = repository;
         this.validator = validator;
         this.unitOfWork = unitOfWork;
-        this.mapper = mapper;
     }
 
     public async Task<Result<ExamAttendantResponse>> Handle(
         CreateExamAttendantCommand request,
         CancellationToken cancellationToken)
     {
-        var validationResult = validator.Validate(request);
-        if (!validationResult.IsValid)
-        {
-            StringBuilder mesages = new StringBuilder();
-            foreach (var item in validationResult.Errors)
-            {
-                mesages.Append(item.ErrorMessage);
-            }
-            Error error = new Error("Validation error", mesages.ToString());
-            return Result.Failure<ExamAttendantResponse>(error);
-        }
-
         ExamAttendant attendant =ExamAttendantMapper.MapToExamAttendant(request);
 
         repository.Insert(attendant);
