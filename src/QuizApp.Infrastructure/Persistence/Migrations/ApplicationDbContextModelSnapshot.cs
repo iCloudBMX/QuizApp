@@ -30,7 +30,17 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("QuestionsId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ExamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ExamsId", "QuestionsId");
+
+                    b.HasIndex("ExamId");
+
+                    b.HasIndex("QuestionId");
 
                     b.HasIndex("QuestionsId");
 
@@ -310,14 +320,24 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("QuizApp.Domain.Entities.Exam", null)
                         .WithMany()
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("QuizApp.Domain.Entities.Exam", null)
+                        .WithMany()
                         .HasForeignKey("ExamsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("QuizApp.Domain.Entities.Question", null)
                         .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("QuizApp.Domain.Entities.Question", null)
+                        .WithMany()
                         .HasForeignKey("QuestionsId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
