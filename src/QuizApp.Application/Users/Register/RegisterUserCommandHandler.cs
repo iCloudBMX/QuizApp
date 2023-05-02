@@ -32,7 +32,8 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 
     public async Task<Result<Guid>> Handle(
         RegisterUserCommand request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+        int count = 1)
     {
         string randomSalt = Guid.NewGuid().ToString();
 
@@ -53,15 +54,32 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
             OtpCodeHelper.GenerateOtpCode());
 
         newUser.OtpCodes.Add(newOtpCode);
-        await this.unitOfWork.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await this.unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+        catch (Exception)
+        {
+            if (count < 3)
+                return await this.Handle(request, cancellationToken, ++count);
+            else
+                throw;
+        }
 
         var mailRequest = new MailRequest(
            ToEmail: request.Email,
             Subject: EmailMessageExample.GetEmailSubject(),
             Body: EmailMessageExample.GetEmailBody(request.FirstName, newOtpCode.Code));
-
-        await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
-
+        try
+        {
+            await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
+        }
+        catch (Exception)
+        {
+            this.userRepository.Delete(newUser);
+            await this.unitOfWork.SaveChangesAsync(cancellationToken);
+            throw;
+        }
 
         return newUser.Id;
     }
