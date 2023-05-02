@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.ExamAttendants;
+using QuizApp.Application.ExamAttendants.DeleteExamAttendantById;
 using QuizApp.Application.ExamAttendants.GetExamAttendantByToken;
 using QuizApp.Application.ExamAttendants.GetExamAttendantsByExam;
 
@@ -28,6 +29,7 @@ public class ExamAttendantController : ApiController
         }
         return Ok(response);
     }
+
     [HttpGet("examId:Guid")]
     public async ValueTask<IActionResult> GetExamAttendantByExamId(
         Guid examId,
@@ -51,9 +53,28 @@ public class ExamAttendantController : ApiController
         string token,
         CancellationToken cancellationToken)
     {
-        var query=new GetExamAttendantByTokenQuery(token);
+        var query = new GetExamAttendantByTokenQuery(token);
+
         var response = await HandleAsync<ExamAttendantResponse,
             GetExamAttendantByTokenQuery>(query, cancellationToken);
+
+        if (response.IsFailure)
+            return HandleFailure(response);
+
+        return Ok(response);
+    }
+
+
+    [HttpDelete("id:Guid")]
+    public async ValueTask<IActionResult> DeleteExamAttendantById(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var query = new DeleteExamAttendantByIdCommand(id);
+
+        var response = await HandleAsync<ExamAttendantResponse,
+            DeleteExamAttendantByIdCommand>(query, cancellationToken);
+
         if (response.IsFailure)
             return HandleFailure(response);
 

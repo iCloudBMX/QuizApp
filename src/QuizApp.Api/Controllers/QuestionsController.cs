@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.Questions.CreateQuestion;
+using QuizApp.Application.Questions.DeleteQuestion;
 using QuizApp.Application.Questions.GetAllQuestions;
 using QuizApp.Application.Questions.GetQuestionById;
 using QuizApp.Application.Questions.UpdateQuestion;
@@ -24,20 +25,6 @@ public class QuestionsController : ApiController
             CreateQuestionCommand>(request, cancellationToken);
 
         if(response.IsFailure)
-            return HandleFailure(response);
-
-        return Ok(response.Value);
-    }
-
-    [HttpPut]
-    public async ValueTask<IActionResult> PutQuestion(
-        UpdateQuestionCommand request,
-        CancellationToken cancellationToken)
-    {
-        var response = await HandleAsync<UpdateQuestionResponse,
-            UpdateQuestionCommand>(request, cancellationToken);
-
-        if (response.IsFailure)
             return HandleFailure(response);
 
         return Ok(response.Value);
@@ -67,11 +54,42 @@ public class QuestionsController : ApiController
         var response = await HandleAsync<GetAllQuestionsResponse, GetAllQuestionsQuery>
             (query, cancellationToken);
 
-        if(response.IsFailure)
+        if (response.IsFailure)
         {
             return HandleFailure(response);
         }
 
         return Ok(response.Value);
     }
+
+    [HttpPut]
+    public async ValueTask<IActionResult> PutQuestion(
+        UpdateQuestionCommand request,
+        CancellationToken cancellationToken)
+    {
+        var response = await HandleAsync<UpdateQuestionResponse,
+            UpdateQuestionCommand>(request, cancellationToken);
+
+        if (response.IsFailure)
+            return HandleFailure(response);
+
+        return Ok(response.Value);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteQuestion(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteQuestionCommand(id);
+        var result = await HandleAsync<Guid, DeleteQuestionCommand>(command, cancellationToken);
+
+        if(result.IsFailure)
+        {
+            return HandleFailure(result);
+        }
+
+        return Ok(result.Value);
+    }
+    
 }
