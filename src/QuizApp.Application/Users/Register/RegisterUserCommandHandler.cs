@@ -1,5 +1,6 @@
 ﻿using QuizApp.Application.Abstractions;
 using QuizApp.Application.Helpers;
+using QuizApp.Application.Helpers.PasswordHashers;
 using QuizApp.Domain.Entities;
 using QuizApp.Domain.Enums;
 using QuizApp.Domain.Interfaces;
@@ -57,7 +58,7 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
         var mailRequest = new MailRequest(
            ToEmail: request.Email,
             Subject: EmailMessageExample.GetEmailSubject(),
-            Body: EmailMessageExample.GetEmailBody(request.FirstName,newOtpCode.Code));
+            Body: EmailMessageExample.GetEmailBody(request.FirstName, newOtpCode.Code));
 
         await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
 
