@@ -32,7 +32,7 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 
     public async Task<Result<Guid>> Handle(
         RegisterUserCommand request,
-        CancellationToken cancellationToken
+        CancellationToken cancellationToken,
         int count = 1)
     {
         string randomSalt = Guid.NewGuid().ToString();
