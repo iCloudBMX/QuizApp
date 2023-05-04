@@ -22,4 +22,9 @@
     <ProjectReference Include="..\QuizApp.Domain\QuizApp.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="AttendantAnswer\CreateAttendantAnswer\" />
+    <Folder Include="AttendantAnswer\GetAttendantAnswerByExam\" />
+  </ItemGroup>
+
 </Project>
