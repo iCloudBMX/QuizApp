@@ -10,7 +10,7 @@ namespace QuizApp.Application.Exams.AddQuestionsByExamId
         private readonly IUnitOfWork unitOfWork;
 
         public AddQuestionsByExamIdCommandHandler(
-            IExamRepository examRepository, 
+            IExamRepository examRepository,
             IUnitOfWork unitOfWork)
         {
             this.examRepository = examRepository;
@@ -33,7 +33,7 @@ namespace QuizApp.Application.Exams.AddQuestionsByExamId
                 return Result.Failure<Guid>(
                     Domain.Errors.DomainErrors.Exam.NotFound(examId));
             }
-            var query = "INSERT INTO ExamQuestions (ExamId, QuestionId) VALUES ";
+            var query = "INSERT INTO ExamQuestion (ExamId, QuestionId) VALUES ";
 
             query += string.Join(",", questionsIds.Select(qId => $"('{examId}', '{qId}')"));
 

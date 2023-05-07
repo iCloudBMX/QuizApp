@@ -12,14 +12,12 @@ public class CreateQuestionValidator : AbstractValidator<CreateQuestionCommand>
     public CreateQuestionValidator()
     {
         RuleFor(q => q.Type)
-            .NotEmpty()
-            .WithMessage("Question type should be specified")
-            .GreaterThanOrEqualTo(0);
+            .NotEmpty().WithMessage("Question type should be specified")
+            .GreaterThanOrEqualTo(1);
 
         RuleFor(q => q.Level)
-            .NotEmpty()
-            .WithMessage("Question level should be specified")
-            .GreaterThanOrEqualTo(0);
+            .NotEmpty().WithMessage("Question level should be specified")
+            .GreaterThanOrEqualTo(1);
 
         RuleFor(q => q.Content)
             .NotEmpty()

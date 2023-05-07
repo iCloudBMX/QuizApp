@@ -34,13 +34,14 @@ public class ExamsController : ApiController
         return Ok(response.Value);
     }
 
-    [HttpPost("/{examId:guid}")]
+    [HttpPost("/examid/questions")]
     public async Task<IActionResult>AddQuestionsByExamId(
-        Guid examId,
-        IList<Guid>questionsIds,
+       AddQuestionsByExamIdCommand addQuestionsByExamIdCommand,
         CancellationToken cancellationToken)
     {
-        var query=new AddQuestionsByExamIdCommand(examId, questionsIds);
+        var query=new AddQuestionsByExamIdCommand(
+            addQuestionsByExamIdCommand.ExamId,
+            addQuestionsByExamIdCommand.QuestionsIds);
 
         var response = await HandleAsync<Guid,
             AddQuestionsByExamIdCommand>(query, cancellationToken);

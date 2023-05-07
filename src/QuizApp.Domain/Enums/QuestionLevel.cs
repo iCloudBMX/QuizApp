@@ -2,7 +2,7 @@
 
 public enum QuestionLevel
 {
-    Easy,
+    Easy=1,
     Medium,
     Hard
 }
