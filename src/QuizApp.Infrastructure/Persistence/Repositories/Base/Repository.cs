@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizApp.Domain.Repositories;
-using System.Linq.Expressions;
 
 namespace QuizApp.Infrastructure.Persistence.Repositories;
 
@@ -36,7 +35,10 @@ public class Repository<T> : IRepository<T> where T : class
                 keyValues: entityIds,
                 cancellationToken: cancellationToken);
     }
-
+    public IQueryable<T> SelectAsync()
+    {
+        return applicationDbContext.Set<T>();
+    }
     public void Update(T entity) =>
         this.applicationDbContext.Entry(entity).State = EntityState.Modified;
 

@@ -4,4 +4,5 @@ namespace QuizApp.Domain.Repositories;
 
 public interface IAttendantAnswerRepository : IRepository<AttendantAnswer>
 {
+    public ValueTask<IQueryable<AttendantAnswer>> SelectWithQuestions();
 }
