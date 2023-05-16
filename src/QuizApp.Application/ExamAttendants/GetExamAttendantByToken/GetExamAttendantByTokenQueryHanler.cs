@@ -16,7 +16,7 @@ public class GetExamAttendantByTokenQueryHanler
 
     public async Task<Result<ExamAttendantResponse>> Handle(GetExamAttendantByTokenQuery request, CancellationToken cancellationToken)
     {
-        var examAttendants = await repository.SelectAllAsync();
+        var examAttendants = repository.SelectAllAsync();
 
         examAttendants = examAttendants.Where(
             e => e.Token.Equals(request.token));

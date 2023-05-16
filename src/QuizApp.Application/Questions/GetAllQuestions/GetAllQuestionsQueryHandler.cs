@@ -21,7 +21,7 @@ public class GetAllQuestionsQueryHandler : IQueryHandler<GetAllQuestionsQuery ,G
         GetAllQuestionsQuery request,
         CancellationToken cancellationToken)
     {
-        var questions = await this.questionRepository.SelectAllAsync(cancellationToken);
+        var questions = this.questionRepository.SelectAllAsync();
 
         var allQuestionResponse = new GetAllQuestionsResponse(new List<GetQuestionByIdResponse>());
 

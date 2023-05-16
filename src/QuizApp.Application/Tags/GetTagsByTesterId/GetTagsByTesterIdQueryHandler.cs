@@ -19,13 +19,13 @@ public class GetTagsByTesterIdQueryHandler :
         GetTagsByTesterIdQuery request, 
         CancellationToken cancellationToken)
     {
-        var tags = await tagRepository.SelectAllAsync();
+        var tags = tagRepository.SelectAllAsync();
 
-        tags = tags.Where(t => t.TesterId == request.TesterId).ToList();
+        var tagsList = tags.Where(t => t.TesterId == request.TesterId).ToList();
 
         var response = new List<TagResponse>();
 
-        foreach (var tag in tags)
+        foreach (var tag in tagsList )
         {
             response.Add(new TagResponse(tag.Id, tag.Title,tag.TesterId));
         }
