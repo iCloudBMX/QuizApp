@@ -1,8 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using QuizApp.Application.Tags.GetTagById;
+using QuizApp.Application.Tags.GetTagsByTesterId;
 using QuizApp.Application.Users.GetAllUsers;
 using QuizApp.Application.Users.GetUserById;
-using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers;
 
@@ -13,6 +14,24 @@ public class UsersController : ApiController
         ISender sender,
         IServiceProvider serviceProvider) : base(sender, serviceProvider)
     {
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllUsers(
+        CancellationToken cancellationToken)
+    {
+        var query = new GetAllUsersQuery();
+
+        var response = await HandleAsync
+            <GetAllUsersResponse, GetAllUsersQuery>(
+            query, cancellationToken);
+
+        if (response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+
+        return Ok(response.Value);
     }
 
     [HttpGet("{id:guid}")]
@@ -33,21 +52,21 @@ public class UsersController : ApiController
         return Ok(response.Value);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllUsers(
-        CancellationToken cancellationToken)
+    [HttpGet("{id:guid}/tags")]
+    public async Task<IActionResult> GetTagsByTesterId(
+        Guid testerId,
+        CancellationToken cancellation)
     {
-        var query = new GetAllUsersQuery();
+        var query = new GetTagsByTesterIdQuery(testerId);
 
-        var response = await HandleAsync
-            <GetAllUsersResponse, GetAllUsersQuery>(
-            query, cancellationToken);
+        var result = await HandleAsync<IList<TagResponse>,
+            GetTagsByTesterIdQuery>(query, cancellation);
 
-        if (response.IsFailure)
+        if (result.IsFailure)
         {
-            return HandleFailure(response);
+            return HandleFailure(result);
         }
 
-        return Ok(response.Value);
+        return Ok(result);
     }
 }

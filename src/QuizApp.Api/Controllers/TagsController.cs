@@ -34,7 +34,7 @@ public class TagsController : ApiController
         return Ok(response);
     }
 
-    [HttpGet("id:guid")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetTagById(
         Guid id,
         CancellationToken cancellationToken)
@@ -52,30 +52,14 @@ public class TagsController : ApiController
         return Ok(response);
     }
 
-    [HttpGet("TesterId:guid")]
-    public async Task<IActionResult> GetTagsByTesterId(
-        Guid testerId,
-        CancellationToken cancellation)
-    {
-        var query = new GetTagsByTesterIdQuery(testerId);
+    
 
-        var result = await HandleAsync<IList<TagResponse>,
-            GetTagsByTesterIdQuery>(query, cancellation);
-
-        if (result.IsFailure)
-        {
-            return HandleFailure(result);
-        }
-
-        return Ok(result);
-    }
-
-    [HttpGet("/questions/tagId:guid")]
+    [HttpGet("{id:guid}/questions")]
     public async Task<IActionResult> GetQuestionsByTagId(
-        Guid tagId,
+        Guid id,
         CancellationToken cancellation)
     {
-        var query = new GetQuestionsByTagQuery(tagId);
+        var query = new GetQuestionsByTagQuery(id);
 
         var result = await HandleAsync<IList<GetQuestionByIdResponse>,
             GetQuestionsByTagQuery>(query, cancellation);
@@ -88,11 +72,12 @@ public class TagsController : ApiController
         return Ok(result);
     }
 
-    [HttpDelete("tagId:guid")]
-    public async Task<IActionResult> DeleteTag(Guid tagId,
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteTag(
+        Guid id,
         CancellationToken cancellation)
     {
-        var query = new DeleteTagCommand(tagId);
+        var query = new DeleteTagCommand(id);
         var result = await HandleAsync<Guid, DeleteTagCommand>(query, cancellation);
         if (result.IsFailure)
         {

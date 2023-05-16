@@ -24,15 +24,21 @@ public static class Dependencies
         services.Configure<JwtOption>(configuration.GetSection("JwtSettings"));
         services.AddTransient<IJwtTokenHandler, JwtTokenHandler>();
 
-        Assembly.GetExecutingAssembly()
+        Assembly
+            .GetExecutingAssembly()
             .GetTypes()
-            .Where(item => item.GetInterfaces()
-            .Where(i => i.IsGenericType).
-            Any(i => i.GetGenericTypeDefinition() == typeof(IValidator<>)) && !item.IsAbstract && !item.IsInterface)
+            .Where(item => !item.IsAbstract && !item.IsInterface)
+            .Where(item => item
+                .GetInterfaces()
+                .Where(i => i.IsGenericType)
+                .Any(i => i.GetGenericTypeDefinition() == typeof(IValidator<>)))
             .ToList()
             .ForEach(assignedTypes =>
             {
-                var serviceType = assignedTypes.GetInterfaces().First(i => i.GetGenericTypeDefinition() == typeof(IValidator<>));
+                var serviceType = assignedTypes
+                    .GetInterfaces()
+                    .First(i => i.GetGenericTypeDefinition() == typeof(IValidator<>));
+                
                 services.AddScoped(serviceType, assignedTypes);
             });
 

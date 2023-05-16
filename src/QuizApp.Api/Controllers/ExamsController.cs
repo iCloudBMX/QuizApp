@@ -8,10 +8,12 @@ using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers;
 
-[Route("api/exam")]
+[Route("api/exams")]
 public class ExamsController : ApiController
 {
-    public ExamsController(ISender sender,IServiceProvider provider)
+    public ExamsController(
+        ISender sender,
+        IServiceProvider provider)
         : base(sender,provider)
     {
     }
@@ -32,17 +34,14 @@ public class ExamsController : ApiController
         return Ok(response.Value);
     }
 
-    [HttpPost("/examid/questions")]
+    [HttpPost("/{id:guid}/questions")]
     public async Task<IActionResult>AddQuestionsByExamId(
        AddQuestionsByExamIdCommand addQuestionsByExamIdCommand,
         CancellationToken cancellationToken)
     {
-        var query=new AddQuestionsByExamIdCommand(
-            addQuestionsByExamIdCommand.ExamId,
-            addQuestionsByExamIdCommand.QuestionsIds);
 
         var response=await HandleAsync<Guid,
-            AddQuestionsByExamIdCommand>(query, cancellationToken);
+            AddQuestionsByExamIdCommand>(addQuestionsByExamIdCommand, cancellationToken);
 
         if (response.IsFailure)
         {
@@ -53,7 +52,7 @@ public class ExamsController : ApiController
     }
 
 
-    [HttpGet("{examId:guid}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetExamById(
         Guid examId,
         CancellationToken cancellationToken)

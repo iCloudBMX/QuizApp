@@ -144,19 +144,11 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     ExamsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    QuestionsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ExamId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    QuestionsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExamQuestion", x => new { x.ExamsId, x.QuestionsId });
-                    table.ForeignKey(
-                        name: "FK_ExamQuestion_Exams_ExamId",
-                        column: x => x.ExamId,
-                        principalTable: "Exams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ExamQuestion_Exams_ExamsId",
                         column: x => x.ExamsId,
@@ -164,16 +156,10 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExamQuestion_Questions_QuestionId",
-                        column: x => x.QuestionId,
-                        principalTable: "Questions",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_ExamQuestion_Questions_QuestionsId",
                         column: x => x.QuestionsId,
                         principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -279,16 +265,6 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                 name: "IX_ExamAttendants_ExamId",
                 table: "ExamAttendants",
                 column: "ExamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExamQuestion_ExamId",
-                table: "ExamQuestion",
-                column: "ExamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExamQuestion_QuestionId",
-                table: "ExamQuestion",
-                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExamQuestion_QuestionsId",

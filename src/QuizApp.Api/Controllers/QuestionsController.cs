@@ -5,10 +5,12 @@ using QuizApp.Application.Questions.DeleteQuestion;
 using QuizApp.Application.Questions.GetAllQuestions;
 using QuizApp.Application.Questions.GetQuestionById;
 using QuizApp.Application.Questions.UpdateQuestion;
+using QuizApp.Application.Tags.GetQuestionsByTag;
 using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers;
-[Route("api/[controller]")]
+
+[Route("api/questions")]
 public class QuestionsController : ApiController
 {
     public QuestionsController(ISender sender,IServiceProvider provider)
@@ -91,5 +93,4 @@ public class QuestionsController : ApiController
 
         return Ok(result.Value);
     }
-    
 }

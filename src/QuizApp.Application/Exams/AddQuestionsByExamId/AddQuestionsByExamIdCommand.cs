@@ -1,5 +1,4 @@
 ﻿using QuizApp.Application.Abstractions;
-using QuizApp.Domain.Entities;
 
 namespace QuizApp.Application.Exams.AddQuestionsByExamId
 {

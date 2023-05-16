@@ -48,7 +48,7 @@ public class AuthController : ApiController
         return Ok(result.Value);
     }
 
-    [HttpPost("resendemail")]
+    [HttpPost("resend-email")]
     public async Task<IActionResult> ResendEmailByUserId(
        [FromBody] ResendEmailCommand userId,
         CancellationToken cancellationToken)
