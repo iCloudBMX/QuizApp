@@ -17,7 +17,7 @@ public class GetAttendantAnswersQueryHandler
         CancellationToken cancellationToken)
     {
         var attendant = examAttendantRepository
-            .SelectAsync()
+            .SelectAllAsync()
             .Where(a => a.Token == request.Token || a.ExamId == request.ExamId)
             .FirstOrDefault();
         if (attendant == null)

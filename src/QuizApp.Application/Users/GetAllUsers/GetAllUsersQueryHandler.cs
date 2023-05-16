@@ -23,7 +23,7 @@ namespace QuizApp.Application.Users.GetAllUsers
             GetAllUsersQuery request,
             CancellationToken cancellationToken)
         {
-            var users =await userRepository.SelectAllAsync(cancellationToken);
+            var users = userRepository.SelectAllAsync();
            var allUserResponse = new GetAllUsersResponse(new List<UserResponse>());
             foreach (var item in users)
             {

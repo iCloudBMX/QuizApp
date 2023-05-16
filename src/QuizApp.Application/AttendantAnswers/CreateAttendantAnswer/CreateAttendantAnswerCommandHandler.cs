@@ -22,7 +22,7 @@ public class CreateAttendantAnswerCommandHandler
     {
         var answer = AttendantAnswerMapper.MapToAnswer(request);
 
-        var storageAnswer = repository.SelectAsync()
+        var storageAnswer = repository.SelectAllAsync()
             .Where(a => a.ExamAttendantId == answer.ExamAttendantId)
             .Where(a => a.ExamId == answer.ExamId)
             .Where(a => a.QuestionId == answer.QuestionId)
