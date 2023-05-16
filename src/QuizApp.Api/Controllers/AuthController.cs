@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application;
 using QuizApp.Application.Users.Login;

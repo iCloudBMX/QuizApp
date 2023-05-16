@@ -15,6 +15,7 @@ public class User
     public DateTime RegisteredAt { get; } = DateTime.Now;
     public DateTime? LastLogin { get; private set; }
     public UserStatus Status { get; private set; }
+    public ICollection<UserSession> UserSessions { get; set; }
 
     public ICollection<Question> Questions { get; private set; } =
         new List<Question>();

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace QuizApp.Api.Controllers;
 
-[ApiController]
+//[ApiController]
 public abstract class ApiController : ControllerBase
 {
     private readonly ISender sender;
