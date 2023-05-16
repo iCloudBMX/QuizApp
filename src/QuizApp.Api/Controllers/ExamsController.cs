@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using QuizApp.Application.ExamAttendants.GetExamAttendantsByExam;
+using QuizApp.Application.ExamAttendants;
 using QuizApp.Application.Exams.AddQuestionsByExamId;
 using QuizApp.Application.Exams.CreateExam;
 using QuizApp.Application.Exams.GetExamById;
@@ -41,7 +43,7 @@ public class ExamsController : ApiController
     {
 
         var response=await HandleAsync<Guid,
-            AddQuestionsByExamIdCommand>(addQuestionsByExamIdCommand, cancellationToken);
+            AddQuestionsByExamIdCommand>(query, cancellationToken);
 
         if (response.IsFailure)
         {
@@ -70,5 +72,23 @@ public class ExamsController : ApiController
 
         return Ok(response.Value);
 
+    }
+
+    [HttpGet("{id:guid}/attendants")]
+    public async ValueTask<IActionResult> GetExamAttendantByExamId(
+        Guid id,
+        CancellationToken token)
+    {
+        var query = new GetExamAttendantByExamQuery(id);
+        var response = await HandleAsync<
+            IQueryable<ExamAttendantResponse>,
+            GetExamAttendantByExamQuery>(query, token);
+
+        if (response.IsFailure)
+        {
+            return HandleFailure(response);
+        }
+
+        return Ok(response);
     }
 }

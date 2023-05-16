@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizApp.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using QuizApp.Infrastructure.Persistence;
 namespace QuizApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230507063515_AttendantQuestions")]
+    partial class AttendantQuestions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,7 +48,17 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("QuestionsId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ExamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ExamsId", "QuestionsId");
+
+                    b.HasIndex("ExamId");
+
+                    b.HasIndex("QuestionId");
 
                     b.HasIndex("QuestionsId");
 
@@ -340,14 +353,24 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("QuizApp.Domain.Entities.Exam", null)
                         .WithMany()
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("QuizApp.Domain.Entities.Exam", null)
+                        .WithMany()
                         .HasForeignKey("ExamsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("QuizApp.Domain.Entities.Question", null)
                         .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("QuizApp.Domain.Entities.Question", null)
+                        .WithMany()
                         .HasForeignKey("QuestionsId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
