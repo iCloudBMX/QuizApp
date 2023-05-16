@@ -52,5 +52,6 @@ public static class Dependencies
         services.AddTransient<IQuestionRepository, QuestionRepository>();
         services.AddTransient<IExamAttendantRepository, ExamAttendantRepository>();
         services.AddTransient<IOtpCodeRepository, OtpCodeRepository>();
+        services.AddTransient<IAttendantAnswerRepository, AttendantAnswerRepository>();
     }
 }

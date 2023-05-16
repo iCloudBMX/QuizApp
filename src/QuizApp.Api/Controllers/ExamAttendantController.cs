@@ -29,7 +29,7 @@ public class ExamAttendantController : ApiController
         return Ok(response);
     }
 
-    [HttpGet("{token:string}")]
+    [HttpGet("{token}")]
     public async ValueTask<IActionResult> GetExamAttendantByToken(
         string token,
         CancellationToken cancellationToken)

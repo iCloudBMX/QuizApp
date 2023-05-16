@@ -43,7 +43,7 @@ public class ExamsController : ApiController
     {
 
         var response=await HandleAsync<Guid,
-            AddQuestionsByExamIdCommand>(query, cancellationToken);
+            AddQuestionsByExamIdCommand>(addQuestionsByExamIdCommand, cancellationToken);
 
         if (response.IsFailure)
         {
