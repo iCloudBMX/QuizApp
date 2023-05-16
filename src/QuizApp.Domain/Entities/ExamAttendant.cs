@@ -9,4 +9,5 @@ public class ExamAttendant
     public float Score { get; set; } = 0;
     public Exam Exam { get; set; }
     public ICollection<AttendantAnswer> AttendantAnswers { get; set; }
+    public ICollection<Question> Questions { get; set; }
 }

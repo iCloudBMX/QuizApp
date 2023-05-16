@@ -4,7 +4,8 @@ using QuizApp.Domain.Repositories;
 using QuizApp.Domain.Shared;
 namespace QuizApp.Application.ExamAttendants;
 
-public class CreateExamAttendantCommandHendler : ICommandHandler<CreateExamAttendantCommand, ExamAttendantResponse>
+public class CreateExamAttendantCommandHendler 
+    : ICommandHandler<CreateExamAttendantCommand, ExamAttendantResponse>
 {
     private readonly IExamAttendantRepository repository;
     private readonly IUnitOfWork unitOfWork;

@@ -3,11 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using QuizApp.Application.ExamAttendants;
 using QuizApp.Application.ExamAttendants.DeleteExamAttendantById;
 using QuizApp.Application.ExamAttendants.GetExamAttendantByToken;
-using QuizApp.Application.ExamAttendants.GetExamAttendantsByExam;
 
 namespace QuizApp.Api.Controllers;
 
-[Route("api/examAttendant")]
+[Route("api/exam-attendant")]
 public class ExamAttendantController : ApiController
 {
     public ExamAttendantController(ISender sender,
@@ -30,25 +29,7 @@ public class ExamAttendantController : ApiController
         return Ok(response);
     }
 
-    [HttpGet("examId:Guid")]
-    public async ValueTask<IActionResult> GetExamAttendantByExamId(
-        Guid examId,
-        CancellationToken token)
-    {
-        var query = new GetExamAttendantByExamQuery(examId);
-        var response = await HandleAsync<
-            IQueryable<ExamAttendantResponse>,
-            GetExamAttendantByExamQuery>(query, token);
-
-        if (response.IsFailure)
-        {
-            return HandleFailure(response);
-        }
-
-        return Ok(response);
-    }
-
-    [HttpGet("token:string")]
+    [HttpGet("{token:string}")]
     public async ValueTask<IActionResult> GetExamAttendantByToken(
         string token,
         CancellationToken cancellationToken)
@@ -65,7 +46,7 @@ public class ExamAttendantController : ApiController
     }
 
 
-    [HttpDelete("id:Guid")]
+    [HttpDelete("{id:Guid}")]
     public async ValueTask<IActionResult> DeleteExamAttendantById(
         Guid id,
         CancellationToken cancellationToken)

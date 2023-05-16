@@ -34,5 +34,18 @@ public class ExamAttendantConfiguration : IEntityTypeConfiguration<ExamAttendant
             .WithMany(y => y.Attendants)
             .HasForeignKey(x => x.ExamId);
 
+        builder
+            .HasMany(ea => ea.Questions)
+            .WithMany()
+            .UsingEntity(
+                l => l.HasOne(typeof(Question))
+                    .WithMany()
+                    .HasForeignKey("QuestionId")
+                    .OnDelete(DeleteBehavior.NoAction),
+                r => r.HasOne(typeof(ExamAttendant))
+                    .WithMany()
+                    .HasForeignKey("ExamAttendantId")
+                    .OnDelete(DeleteBehavior.Cascade));
+
     }
 }
