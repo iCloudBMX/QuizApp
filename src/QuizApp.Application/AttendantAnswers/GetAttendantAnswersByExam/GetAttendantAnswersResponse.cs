@@ -1,4 +1,4 @@
 ﻿namespace QuizApp.Application.AttendantAnswers.GetAttendantAnswerByExam;
 
-public record GetAttendantAnswersQueryResponse(
+public record GetAttendantAnswersResponse(
     ICollection<AttendantAnswerResponse> Response);

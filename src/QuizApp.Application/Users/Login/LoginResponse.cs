@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QuizApp.Application.Users.Login
 {
-   public record class LoginQueryResponse(
+   public record class LoginResponse(
         string AccessToken,
         DateTime expireDate);
 }

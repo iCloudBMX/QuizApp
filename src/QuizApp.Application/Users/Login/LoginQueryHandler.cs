@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace QuizApp.Application.Users.Login
 {
-    public class LoginQueryHandler : IQueryHandler<LoginQuery, LoginQueryResponse>
+    public class LoginQueryHandler : IQueryHandler<LoginQuery, LoginResponse>
     {
         private readonly IUserRepository userRepository;
         private readonly IPasswordHasher passwordHasher;
@@ -23,14 +23,14 @@ namespace QuizApp.Application.Users.Login
             this.jwtTokenHandler = jwtTokenHandler;
         }
 
-        public async Task<Result<LoginQueryResponse>> Handle(LoginQuery request, CancellationToken cancellationToken)
+        public async Task<Result<LoginResponse>> Handle(LoginQuery request, CancellationToken cancellationToken)
         {
             string loginEmail = request.Email;
             string loginPassword = request.Password;
             var maybeUser = await this.userRepository.SelectUserWithEmailAsync(loginEmail);
             if (maybeUser is null)
             {
-                return Result.Failure<LoginQueryResponse>(
+                return Result.Failure<LoginResponse>(
                     Domain.Errors.DomainErrors.User.UserNotFoundByCredentials(loginEmail, loginPassword));
             }
 
@@ -41,7 +41,7 @@ namespace QuizApp.Application.Users.Login
 
             if (checkPassword is false)
             {
-                return Result.Failure<LoginQueryResponse>(
+                return Result.Failure<LoginResponse>(
                      Domain.Errors.DomainErrors.User.UserNotFoundByCredentials(loginEmail, loginPassword));
             }
 
@@ -51,7 +51,7 @@ namespace QuizApp.Application.Users.Login
             string token = new JwtSecurityTokenHandler()
                 .WriteToken(accessToken);
 
-            var loginResponse = new LoginQueryResponse(
+            var loginResponse = new LoginResponse(
                 token, accessToken.ValidTo);
 
             return loginResponse;
