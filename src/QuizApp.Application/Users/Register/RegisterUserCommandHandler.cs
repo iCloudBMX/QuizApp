@@ -1,36 +1,37 @@
 ﻿using QuizApp.Application.Abstractions;
-using QuizApp.Application.Helpers;
+using QuizApp.Application.Helpers.Generatewt;
 using QuizApp.Application.Helpers.PasswordHashers;
 using QuizApp.Domain.Entities;
 using QuizApp.Domain.Enums;
-using QuizApp.Domain.Interfaces;
 using QuizApp.Domain.Repositories;
 using QuizApp.Domain.Shared;
 
 namespace QuizApp.Application.Users.Register;
 
-internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Guid>
+internal sealed class RegisterUserCommandHandler
+    : ICommandHandler<RegisterUserCommand, RegisterUserResponse>
 {
     private readonly IUserRepository userRepository;
     private readonly IUnitOfWork unitOfWork;
-    private readonly IEmailService emailService;
+    private readonly IJwtTokenHandler jwtTokenHandler;
     private readonly IPasswordHasher hasher;
-
-
+    private readonly IUserSessionRepository userSessionRepository;
 
     public RegisterUserCommandHandler(
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        IEmailService emailService,
-        IPasswordHasher hasher)
+        IJwtTokenHandler jwtTokenHandler,
+        IPasswordHasher hasher,
+        IUserSessionRepository userSessionRepository)
     {
-        this.userRepository = userRepository;
-        this.unitOfWork = unitOfWork;
-        this.emailService = emailService;
-        this.hasher = hasher;
+        this.userRepository=userRepository;
+        this.unitOfWork=unitOfWork;
+        this.jwtTokenHandler=jwtTokenHandler;
+        this.hasher=hasher;
+        this.userSessionRepository=userSessionRepository;
     }
 
-    public async Task<Result<Guid>> Handle(
+    public async Task<Result<RegisterUserResponse>> Handle(
         RegisterUserCommand request,
         CancellationToken cancellationToken)
     {
@@ -49,28 +50,15 @@ internal sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserC
 
         this.userRepository.Insert(newUser);
 
-        var newOtpCode = new OtpCode(
-            OtpCodeHelper.GenerateOtpCode());
+        var session = new UserSession(Guid.NewGuid().ToString(), newUser.Id);
 
-        newUser.OtpCodes.Add(newOtpCode);
-        
+        userSessionRepository.Insert(session);
         await this.unitOfWork.SaveChangesAsync(cancellationToken);
 
-        var mailRequest = new MailRequest(
-           ToEmail: request.Email,
-            Subject: EmailMessageExample.GetEmailSubject(),
-            Body: EmailMessageExample.GetEmailBody(request.FirstName, newOtpCode.Code));
-        try
-        {
-            await this.emailService.SendEmailAsync(mailRequest, cancellationToken);
-        }
-        catch (Exception)
-        {
-            this.userRepository.Delete(newUser);
-            await this.unitOfWork.SaveChangesAsync(cancellationToken);
-            throw;
-        }
+        var token = jwtTokenHandler.GenerateAccessToken(newUser, session.Token);
 
-        return newUser.Id;
+        var response = new RegisterUserResponse(token);
+
+        return response;
     }
 }

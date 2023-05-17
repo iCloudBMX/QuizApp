@@ -12,7 +12,7 @@ public class Program
         builder.Services
             .AddInfrastructure(builder.Configuration)
             .AddApplication(builder.Configuration)
-            .AddApis();
+            .AddApis(builder.Configuration);
 
         var app = builder.Build();
 

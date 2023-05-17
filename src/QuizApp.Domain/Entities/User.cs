@@ -10,7 +10,9 @@ public class User
     public string Phone { get; private set; }
     public string Email { get; private set; }
     public UserRole Role { get; private set; }
-    public string Salt { get; set; }
+    public string Salt { get; private set; }
+    public string? RefreshToken { get; private set; }
+    public DateTime? RefreshTokenExpireDate { get; private set; }
     public string PasswordHash { get; private set; }
     public DateTime RegisteredAt { get; } = DateTime.Now;
     public DateTime? LastLogin { get; private set; }
@@ -20,13 +22,13 @@ public class User
     public ICollection<Question> Questions { get; private set; } =
         new List<Question>();
 
-    public ICollection<Tag> Tags { get; private set; } = 
+    public ICollection<Tag> Tags { get; private set; } =
         new List<Tag>();
 
     public ICollection<Exam> Exams { get; private set; } =
-        new List<Exam>(); 
+        new List<Exam>();
 
-    public ICollection<OtpCode> OtpCodes { get; private set; } = 
+    public ICollection<OtpCode> OtpCodes { get; private set; } =
         new List<OtpCode>();
 
     public User(
@@ -38,17 +40,22 @@ public class User
         string passwordHash,
         UserRole role)
     {
-        FirstName = firstName;
-        LastName = lastName;
-        Phone = phone;
-        Email = email;
+        FirstName=firstName;
+        LastName=lastName;
+        Phone=phone;
+        Email=email;
         Salt=salt;
-        PasswordHash = passwordHash;
-        Role = role;
-        Status = UserStatus.New;
+        PasswordHash=passwordHash;
+        Role=role;
+        Status=UserStatus.New;
     }
 
-    public void MarkAsActive() => Status = UserStatus.Active;
+    public void MarkAsActive() => Status=UserStatus.Active;
+    public void UpdateRefreshToken(string refreshToken)
+    {
+        RefreshToken=refreshToken;
+        RefreshTokenExpireDate=DateTime.Now.AddDays(3);
+    }
 }
 
 

@@ -22,6 +22,7 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
                     Salt = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
                     PasswordHash = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     RegisteredAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -119,6 +120,27 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserSessions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserSessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserSessions_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ExamAttendants",
                 columns: table => new
                 {
@@ -206,6 +228,29 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExamAttendantQuestion",
+                columns: table => new
+                {
+                    ExamAttendantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExamAttendantQuestion", x => new { x.ExamAttendantId, x.QuestionId });
+                    table.ForeignKey(
+                        name: "FK_ExamAttendantQuestion_ExamAttendants_ExamAttendantId",
+                        column: x => x.ExamAttendantId,
+                        principalTable: "ExamAttendants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExamAttendantQuestion_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AttendantAnswers",
                 columns: table => new
                 {
@@ -262,6 +307,11 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExamAttendantQuestion_QuestionId",
+                table: "ExamAttendantQuestion",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ExamAttendants_ExamId",
                 table: "ExamAttendants",
                 column: "ExamId");
@@ -312,6 +362,11 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                 table: "Users",
                 column: "Phone",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserSessions_UserId",
+                table: "UserSessions",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -319,6 +374,9 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AttendantAnswers");
+
+            migrationBuilder.DropTable(
+                name: "ExamAttendantQuestion");
 
             migrationBuilder.DropTable(
                 name: "ExamQuestion");
@@ -330,19 +388,22 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                 name: "QuestionTag");
 
             migrationBuilder.DropTable(
-                name: "ExamAttendants");
+                name: "UserSessions");
 
             migrationBuilder.DropTable(
                 name: "QuestionOptions");
 
             migrationBuilder.DropTable(
+                name: "ExamAttendants");
+
+            migrationBuilder.DropTable(
                 name: "Tags");
 
             migrationBuilder.DropTable(
-                name: "Exams");
+                name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "Exams");
 
             migrationBuilder.DropTable(
                 name: "Users");

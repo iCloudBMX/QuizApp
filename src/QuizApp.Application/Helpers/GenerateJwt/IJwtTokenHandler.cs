@@ -4,6 +4,7 @@ namespace QuizApp.Application.Helpers.Generatewt;
 
 public interface IJwtTokenHandler
 {
-    JwtSecurityToken GenerateAccessToken(User user);
+    string GenerateAccessToken(User user, string token);
+    string GenerateRefreshToken();
 }
 

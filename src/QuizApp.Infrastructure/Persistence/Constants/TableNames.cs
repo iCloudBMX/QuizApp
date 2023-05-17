@@ -10,5 +10,6 @@ internal static class TableNames
     public static string Questions = "Questions";
     public static string QuestionOptions = "QuestionOptions";
     public static string Tags = "Tags";
+    public static string UserSessions = "UserSessions";
 
 }
