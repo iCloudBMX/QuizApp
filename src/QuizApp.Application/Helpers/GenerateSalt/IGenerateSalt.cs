@@ -2,5 +2,5 @@
 
 public interface IGenerateSalt
 {
-    public string GenerateSalt();
+    public string GenerateStrng();
 }
