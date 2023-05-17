@@ -1,4 +1,4 @@
-﻿using QuizApp.Application.Abstractions;
+using QuizApp.Application.Abstractions;
 using QuizApp.Application.Helpers.Generatewt;
 using QuizApp.Application.Helpers.PasswordHashers;
 using QuizApp.Domain.Entities;
@@ -7,7 +7,7 @@ using QuizApp.Domain.Shared;
 
 namespace QuizApp.Application.Users.Login
 {
-    public class LoginQueryHandler : IQueryHandler<LoginQuery, LoginQueryResponse>
+    public class LoginQueryHandler : IQueryHandler<LoginQuery, LoginResponse>
     {
         private readonly IUserRepository userRepository;
         private readonly IUserSessionRepository sessionRepository;
@@ -35,9 +35,10 @@ namespace QuizApp.Application.Users.Login
             var maybeUser = await this.userRepository.SelectUserWithEmailAsync(loginEmail);
             if ( maybeUser is null )
             {
+
                 return Result.Failure<LoginQueryResponse>(
                     Domain.Errors.DomainErrors.User.UserNotFoundByCredentials(
-                        loginEmail, loginPassword));
+                        loginEmail, loginPassword));              
             }
 
             bool checkPassword = this.passwordHasher.CheckPassword(
