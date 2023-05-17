@@ -1,45 +1,49 @@
 ﻿using MediatR;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using QuizApp.Application.Helpers.Generatewt;
+using QuizApp.Application.OtpCodes;
 
 namespace QuizApp.Api.Controllers
 {
     [Route("api/otps")]
     public class OtpController : ApiController
     {
-        public OtpController(ISender sender, IServiceProvider serviceProvider) : 
+        private readonly IHttpContextAccessor httpContextAccessor;
+        public OtpController(
+            ISender sender,
+            IServiceProvider serviceProvider,
+            IHttpContextAccessor httpContextAccessor) :
             base(sender, serviceProvider)
         {
+            this.httpContextAccessor=httpContextAccessor;
         }
-
-        [HttpGet]
-        public IEnumerable<string> Get()
+        
+        [HttpPost("send")]
+        public async ValueTask<IActionResult> SendOtpCode(
+            CancellationToken cancellationToken)
         {
-            return new string[] { "value1", "value2" };
-        }
+            var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type=="id")?.Value;
 
-        // GET api/<OtpController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+            var email = httpContextAccessor.HttpContext.User.Claims
+                .FirstOrDefault(p=>p.Type==CustomClaimNames.Email);
 
-        // POST api/<OtpController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+            if ( id is null || email is null )
+                return BadRequest();
 
-        // PUT api/<OtpController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+            var command = new SendOtpCommand(
+                Guid.Parse(id),
+                email.Value);
 
-        // DELETE api/<OtpController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var result = await HandleAsync<bool, SendOtpCommand>(
+                command, cancellationToken);
+
+            if ( result.IsFailure )
+                return HandleFailure(result);
+
+            return Ok(result.Value);
         }
     }
 }

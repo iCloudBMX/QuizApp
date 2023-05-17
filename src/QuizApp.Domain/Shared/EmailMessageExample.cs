@@ -2,7 +2,6 @@
 {
     public static class EmailMessageExample
     {
-        private static string emailBody;
         private static string subject = "New User Registration";
 
         public static string GetEmailBody(string firstname, string otpCode)

@@ -12,7 +12,7 @@ using QuizApp.Infrastructure.Persistence;
 namespace QuizApp.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230503114124_Initial")]
+    [Migration("20230517105125_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,21 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ExamAttendantQuestion", b =>
+                {
+                    b.Property<Guid>("ExamAttendantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ExamAttendantId", "QuestionId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("ExamAttendantQuestion");
+                });
 
             modelBuilder.Entity("ExamQuestion", b =>
                 {
@@ -284,6 +299,10 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("RefreshToken")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
                     b.Property<DateTime>("RegisteredAt")
                         .HasColumnType("datetime2");
 
@@ -307,6 +326,47 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("QuizApp.Domain.Entities.UserSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSessions", (string)null);
+                });
+
+            modelBuilder.Entity("ExamAttendantQuestion", b =>
+                {
+                    b.HasOne("QuizApp.Domain.Entities.ExamAttendant", null)
+                        .WithMany()
+                        .HasForeignKey("ExamAttendantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QuizApp.Domain.Entities.Question", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ExamQuestion", b =>
@@ -440,6 +500,17 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("QuizApp.Domain.Entities.UserSession", b =>
+                {
+                    b.HasOne("QuizApp.Domain.Entities.User", "User")
+                        .WithMany("UserSessions")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("QuizApp.Domain.Entities.Exam", b =>
                 {
                     b.Navigation("Attendants");
@@ -471,6 +542,8 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                     b.Navigation("Questions");
 
                     b.Navigation("Tags");
+
+                    b.Navigation("UserSessions");
                 });
 #pragma warning restore 612, 618
         }

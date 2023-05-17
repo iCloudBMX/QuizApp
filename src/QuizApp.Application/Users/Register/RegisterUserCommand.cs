@@ -7,4 +7,4 @@ public record RegisterUserCommand(
     string LastName,
     string PhoneNumber,
     string Email,
-    string Password) : ICommand<Guid>;
+    string Password) : ICommand<RegisterUserResponse>;

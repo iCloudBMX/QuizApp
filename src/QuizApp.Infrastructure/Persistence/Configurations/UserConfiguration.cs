@@ -28,6 +28,11 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired(true)
             .HasMaxLength(50);
 
+        builder
+            .Property(p => p.RefreshToken)
+            .IsRequired(false)
+            .HasMaxLength(64);
+
         builder.Property(u => u.PasswordHash)
             .IsRequired(true)
             .HasMaxLength(50);

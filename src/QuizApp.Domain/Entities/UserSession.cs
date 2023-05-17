@@ -7,9 +7,17 @@ namespace QuizApp.Domain.Entities
         public Guid Id { get; private set; }
         public string Token { get; private set; }
         public SessionStatus Status { get; private set; }
-        public DateTime CreatedAt { get; private set; } = DateTime.Now;
+        public DateTime CreatedAt { get; private set; } 
         public Guid UserId { get; private set; }
         public User User { get; private set; }
+
+        public UserSession(string token, Guid userId)
+        {
+            Token=token;
+            UserId=userId;
+            Status=SessionStatus.Unverified;
+            CreatedAt=DateTime.Now;
+        }
 
         public bool IsVerified() =>
             Status == SessionStatus.Verified;

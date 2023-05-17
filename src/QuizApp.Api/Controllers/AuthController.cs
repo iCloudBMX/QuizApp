@@ -22,7 +22,7 @@ public class AuthController : ApiController
         [FromBody] RegisterUserCommand registerUserCommand,
         CancellationToken cancellationToken)
     {
-        var result = await HandleAsync<Guid, RegisterUserCommand>(
+        var result = await HandleAsync<RegisterUserResponse, RegisterUserCommand>(
             registerUserCommand, cancellationToken);
 
         if (result.IsFailure)
