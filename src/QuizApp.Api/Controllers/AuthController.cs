@@ -71,7 +71,7 @@ public class AuthController : ApiController
        [FromBody] LoginQuery loginQuery,
        CancellationToken cancellationToken)
     {
-        var response =await HandleAsync<LoginResponse, LoginQuery>(
+        var response =await HandleAsync<LoginQueryResponse, LoginQuery>(
             loginQuery,cancellationToken);
 
         if(response.IsFailure)

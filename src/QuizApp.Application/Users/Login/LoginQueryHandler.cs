@@ -7,7 +7,7 @@ using QuizApp.Domain.Shared;
 
 namespace QuizApp.Application.Users.Login
 {
-    public class LoginQueryHandler : IQueryHandler<LoginQuery, LoginResponse>
+    public class LoginQueryHandler : IQueryHandler<LoginQuery, LoginQueryResponse>
     {
         private readonly IUserRepository userRepository;
         private readonly IUserSessionRepository sessionRepository;
