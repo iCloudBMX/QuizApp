@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace QuizApp.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,7 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                     Role = table.Column<int>(type: "int", nullable: false),
                     Salt = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     RefreshToken = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: true),
+                    RefreshTokenExpireDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PasswordHash = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     RegisteredAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastLogin = table.Column<DateTime>(type: "datetime2", nullable: true),

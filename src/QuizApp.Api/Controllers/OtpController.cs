@@ -9,6 +9,7 @@ using QuizApp.Application.OtpCodes;
 namespace QuizApp.Api.Controllers
 {
     [Route("api/otps")]
+   
     public class OtpController : ApiController
     {
         private readonly IHttpContextAccessor httpContextAccessor;
@@ -20,7 +21,7 @@ namespace QuizApp.Api.Controllers
         {
             this.httpContextAccessor=httpContextAccessor;
         }
-        
+        [Authorize]
         [HttpPost("send")]
         public async ValueTask<IActionResult> SendOtpCode(
             CancellationToken cancellationToken)

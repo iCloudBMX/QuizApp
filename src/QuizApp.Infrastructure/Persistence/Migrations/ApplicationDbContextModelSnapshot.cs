@@ -300,6 +300,9 @@ namespace QuizApp.Infrastructure.Persistence.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<DateTime?>("RefreshTokenExpireDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("RegisteredAt")
                         .HasColumnType("datetime2");
 
