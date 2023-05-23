@@ -42,6 +42,7 @@ public static class Dependencies
                 ValidateLifetime=true,
                 ValidateIssuerSigningKey=true,
                 ValidIssuer=configuration["JwtSettings:Issuer"],
+                ValidAudience = configuration["JwtSettings:Audience"],
                 IssuerSigningKey=new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"])),
                 ClockSkew=TimeSpan.Zero

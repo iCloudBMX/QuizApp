@@ -54,10 +54,10 @@ public class UsersController : ApiController
 
     [HttpGet("{id:guid}/tags")]
     public async Task<IActionResult> GetTagsByTesterId(
-        Guid testerId,
+        Guid id,
         CancellationToken cancellation)
     {
-        var query = new GetTagsByTesterIdQuery(testerId);
+        var query = new GetTagsByTesterIdQuery(id);
 
         var result = await HandleAsync<IList<TagResponse>,
             GetTagsByTesterIdQuery>(query, cancellation);
