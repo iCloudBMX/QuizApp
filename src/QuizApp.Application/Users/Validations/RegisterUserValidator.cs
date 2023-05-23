@@ -16,6 +16,7 @@ namespace QuizApp.Application.Users.Validations
                 .NotNull().NotEmpty().WithMessage("Password is required")
                 .Length(8, 50).WithMessage("Password must be between 8 and 50 characters");
 
+
             RuleFor(user => user.PhoneNumber)
                 .NotNull().NotEmpty().WithMessage("Number is required");
 

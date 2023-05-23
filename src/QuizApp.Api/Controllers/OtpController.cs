@@ -1,37 +1,32 @@
 ﻿using MediatR;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using QuizApp.Application.Helpers.Generatewt;
 using QuizApp.Application.OtpCodes;
+using System.Security.Claims;
 
 namespace QuizApp.Api.Controllers
 {
     [Route("api/otps")]
-   
+
+    [Authorize]
     public class OtpController : ApiController
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
         public OtpController(
             ISender sender,
-            IServiceProvider serviceProvider,
-            IHttpContextAccessor httpContextAccessor) :
+            IServiceProvider serviceProvider) :
             base(sender, serviceProvider)
-        {
-            this.httpContextAccessor=httpContextAccessor;
-        }
-        [Authorize]
+        { }
+
         [HttpPost("send")]
         public async ValueTask<IActionResult> SendOtpCode(
             CancellationToken cancellationToken)
         {
-            var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type=="id")?.Value;
+            var id = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
 
-            var email = httpContextAccessor.HttpContext.User.Claims
-                .FirstOrDefault(p=>p.Type==CustomClaimNames.Email);
+            var email = HttpContext.User.Claims
+                .FirstOrDefault(p => p.Type == ClaimTypes.Email);
 
-            if ( id is null || email is null )
+            if (id is null || email is null)
                 return BadRequest();
 
             var command = new SendOtpCommand(
@@ -41,7 +36,7 @@ namespace QuizApp.Api.Controllers
             var result = await HandleAsync<bool, SendOtpCommand>(
                 command, cancellationToken);
 
-            if ( result.IsFailure )
+            if (result.IsFailure)
                 return HandleFailure(result);
 
             return Ok(result.Value);

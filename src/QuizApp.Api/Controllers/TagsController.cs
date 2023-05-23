@@ -5,7 +5,6 @@ using QuizApp.Application.Tags.CreateTag;
 using QuizApp.Application.Tags.DeleteTag;
 using QuizApp.Application.Tags.GetQuestionsByTag;
 using QuizApp.Application.Tags.GetTagById;
-using QuizApp.Application.Tags.GetTagsByTesterId;
 using QuizApp.Domain.Shared;
 
 namespace QuizApp.Api.Controllers;
@@ -51,8 +50,6 @@ public class TagsController : ApiController
 
         return Ok(response);
     }
-
-    
 
     [HttpGet("{id:guid}/questions")]
     public async Task<IActionResult> GetQuestionsByTagId(
